@@ -1,0 +1,27 @@
+{
+	"apiVersion": 2,
+	"name": "create-block/starter-block",
+	"title": "Starter Block",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Example block written with ESNext standard and JSX support – build step required.",
+	"textdomain": "starter-block",
+	"attributes": {
+		"message": {
+			"type": "string",
+			"source": "text",
+			"selector": "div"
+		},
+		"showPostCounts": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"supports": {
+		"align": true,
+		"html": false
+	},
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css"
+}
