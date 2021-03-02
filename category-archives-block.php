@@ -1,19 +1,21 @@
 <?php
 /**
  * Plugin Name:     Category Archives Block
- * Description:     The Category Archives Block displays a monthly or yearly archive of posts for one specific category.
+ * Plugin URI:      https://wordpress.org/plugins/category-archives-block/
+ * Description:     Displays a monthly or yearly archive of posts for one specific category.
  * Version:         0.1.0
- * Author:          The WordPress Contributors
+ * Author:          TipTopPress
+ * Author URI:      http://tiptoppress.com
  * License:         GPL-2.0-or-later
  * License URI:     https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:     starter-block
+ * Text Domain:     category-archives-block
  *
- * @package         create-block
+ * @package         tiptip
  */
 
 
 /**
- * Renders the `core/archives` block on server.
+ * Renders the `tiptip/category-archives-block` on server.
  *
  * @see WP_Widget_Archives
  *
@@ -28,9 +30,9 @@ function render_block_category_archive( $attributes ) {
 
 	if ( ! empty( $attributes['displayAsDropdown'] ) ) {
 
-		$class .= ' wp-block-archives-dropdown';
+		$class .= ' category-archives-block-dropdown';
 
-		$dropdown_id = esc_attr( uniqid( 'wp-block-archives-' ) );
+		$dropdown_id = esc_attr( uniqid( 'category-archives-block-' ) );
 		$title       = __( 'Archives' );
 
 		/** This filter is documented in wp-includes/widgets/class-wp-widget-archives.php */
@@ -78,7 +80,7 @@ function render_block_category_archive( $attributes ) {
 		);
 	}
 
-	$class .= ' wp-block-archives-list';
+	$class .= ' category-archives-block-list';
 
 	/** This filter is documented in wp-includes/widgets/class-wp-widget-archives.php */
 	$archives_args = apply_filters(
@@ -95,7 +97,7 @@ function render_block_category_archive( $attributes ) {
 
 	$classnames = esc_attr( $class );
 
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classnames ) );
+	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classnames ) ); echo $wrapper_attributes;
 
 	if ( empty( $archives ) ) {
 		return sprintf(
@@ -118,28 +120,28 @@ function render_block_category_archive( $attributes ) {
  *
  * @see https://developer.wordpress.org/block-editor/tutorials/block-tutorial/applying-styles-with-stylesheets/
  */
-function create_block_starter_block_block_init() {
+function category_archives_block_init() {
 	$dir = __DIR__;
 
 	$script_asset_path = "$dir/build/index.asset.php";
 	if ( ! file_exists( $script_asset_path ) ) {
 		throw new Error(
-			'You need to run `npm start` or `npm run build` for the "create-block/starter-block" block first.'
+			'You need to run `npm start` or `npm run build` for the "tiptip/category-archives-block" block first.'
 		);
 	}
 	$index_js     = 'build/index.js';
 	$script_asset = require( $script_asset_path );
 	wp_register_script(
-		'create-block-starter-block-block-editor',
+		'tiptip-category-archives-block-editor',
 		plugins_url( $index_js, __FILE__ ),
 		$script_asset['dependencies'],
 		$script_asset['version']
 	);
-	wp_set_script_translations( 'create-block-starter-block-block-editor', 'starter-block' );
+	wp_set_script_translations( 'tiptip-category-archives-block-editor', 'category-archives-block' );
 
 	$editor_css = 'build/style-index.css';
 	wp_register_style(
-		'create-block-starter-block-block-editor',
+		'tiptip-category-archives-block-editor',
 		plugins_url( $editor_css, __FILE__ ),
 		array(),
 		filemtime( "$dir/$editor_css" )
@@ -147,18 +149,18 @@ function create_block_starter_block_block_init() {
 
 	$style_css = 'build/style-index.css';
 	wp_register_style(
-		'create-block-starter-block-block',
+		'tiptip-category-archives-block',
 		plugins_url( $style_css, __FILE__ ),
 		array(),
 		filemtime( "$dir/$style_css" )
 	);
 
 	register_block_type(
-		'create-block/starter-block',
+		'tiptip/category-archives-block',
 		array(
-			'editor_script' => 'create-block-starter-block-block-editor',
-			'editor_style'  => 'create-block-starter-block-block-editor',
-			'style'         => 'create-block-starter-block-block',
+			'editor_script' => 'tiptip-category-archives-block-editor',
+			'editor_style'  => 'tiptip-category-archives-block-editor',
+			'style'         => 'tiptip-category-archives-block',
 			'attributes'    => array(
 				'showPostCounts' => array(
 				'type'           => 'boolean',
@@ -173,4 +175,4 @@ function create_block_starter_block_block_init() {
 		)
 	);
 }
-add_action( 'init', 'create_block_starter_block_block_init' );
+add_action( 'init', 'category_archives_block_init' );

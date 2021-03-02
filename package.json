@@ -1,5 +1,5 @@
 {
-	"name": "starter-block",
+	"name": "category-archives-block",
 	"version": "0.1.0",
 	"description": "Displays a monthly or yearly archive of posts for one specific category.",
 	"author": "The WordPress Contributors",

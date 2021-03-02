@@ -1,6 +1,6 @@
 === Category Archives Block ===
 Contributors:      kometschuh
-Donate link: https://www.paypal.com/donate/?hosted_button_id=RSR28JGA4M7JC
+Donate link:       https://www.paypal.com/donate/?hosted_button_id=RSR28JGA4M7JC
 Tags:              block, category, archive
 Requires at least: 5.6.0
 Tested up to:      5.6.0

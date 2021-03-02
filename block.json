@@ -1,11 +1,11 @@
 {
 	"apiVersion": 2,
-	"name": "create-block/starter-block",
+	"name": "tiptip/category-archives-block",
 	"title": "Category Archives",
 	"category": "widgets",
 	"icon": "archive",
 	"description": "Displays a monthly or yearly archive of posts for one specific category.",
-	"textdomain": "starter-block",
+	"textdomain": "category-archives-block",
 	"attributes": {
 		"message": {
 			"type": "string",

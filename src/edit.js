@@ -40,7 +40,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			<div { ...useBlockProps() }>
 				<Disabled>
 					<ServerSideRender
-						block="create-block/starter-block"
+						block="tiptip/category-archives-block"
 						attributes={ attributes }
 					/>
 				</Disabled>

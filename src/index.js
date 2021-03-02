@@ -12,7 +12,7 @@ import save from './save';
  *
  * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
  */
-registerBlockType( 'create-block/starter-block', {
+registerBlockType( 'tiptip/category-archives-block', {
 	/**
 	 * @see https://make.wordpress.org/core/2020/11/18/block-api-version-2/
 	 */
@@ -22,7 +22,7 @@ registerBlockType( 'create-block/starter-block', {
 	 * This is the display title for your block, which can be translated with `i18n` functions.
 	 * The block inserter will show this name.
 	 */
-	title: __( 'Category Archives', 'starter-block' ),
+	title: __( 'Category Archives', 'category-archives-block' ),
 
 	/**
 	 * This is a short description for your block, can be translated with `i18n` functions.
@@ -30,7 +30,7 @@ registerBlockType( 'create-block/starter-block', {
 	 */
 	description: __(
 		'Displays a monthly or yearly archive of posts for one specific category.',
-		'starter-block'
+		'category-archives-block'
 	),
 
 	/**
