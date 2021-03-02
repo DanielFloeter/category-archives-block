@@ -1,6 +1,7 @@
-=== Starter Block ===
-Contributors:      The WordPress Contributors
-Tags:              block
+=== Category Archives Block ===
+Contributors:      kometschuh
+Donate link: https://www.paypal.com/donate/?hosted_button_id=RSR28JGA4M7JC
+Tags:              block, category, archive
 Requires at least: 5.6.0
 Tested up to:      5.6.0
 Stable tag:        0.1.0
@@ -8,14 +9,19 @@ Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Example block written with ESNext standard and JSX support – build step required.
+Dsplays a monthly or yearly archive of posts for one specific category. 
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+Displays a monthly or yearly archive of posts for one specific category. It is very similar to the WordPress Archives except that it just displays one specific category's posts, not all categories. It can be configured by month or year with or without post counts.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+= Features =
+* Option group by month or year
+* Option show post counts
+
+= Contribute =
+While using this plugin if you find any bug or any conflict, please submit an issue at
+[Github](https://github.com/tiptoppress/category-posts-widget) (If possible with a pull request).
 
 == Installation ==
 
@@ -23,27 +29,20 @@ This section describes how to install the plugin and get it working.
 
 e.g.
 
-1. Upload the plugin files to the `/wp-content/plugins/starter-block` directory, or install the plugin through the WordPress plugins screen directly.
+1. Upload the plugin files to the `/wp-content/plugins/category-archive-block` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
 
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= How is the Cateogry Archives Block different than the built-in Archive widget? =
 
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
+The Category Archives Block lets you show posts for one specific category.  The built-in Archive widget shows posts for all categories.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. From the Category Archives Block control, you can set the title, category, whether to group by month or year and whether to show post counts.
+2. The archive displayed as a list with post counts and the archive displayed as a pulldown of years without post counts.
 
 == Changelog ==
 

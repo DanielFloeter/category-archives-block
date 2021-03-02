@@ -22,14 +22,14 @@ registerBlockType( 'create-block/starter-block', {
 	 * This is the display title for your block, which can be translated with `i18n` functions.
 	 * The block inserter will show this name.
 	 */
-	title: __( 'Starter Block', 'starter-block' ),
+	title: __( 'Category Archives', 'starter-block' ),
 
 	/**
 	 * This is a short description for your block, can be translated with `i18n` functions.
 	 * It will be shown in the Block Tab in the Settings Sidebar.
 	 */
 	description: __(
-		'Example block written with ESNext standard and JSX support – build step required.',
+		'Displays a monthly or yearly archive of posts for one specific category.',
 		'starter-block'
 	),
 
@@ -43,7 +43,7 @@ registerBlockType( 'create-block/starter-block', {
 	 * An icon property should be specified to make it easier to identify a block.
 	 * These can be any of WordPress’ Dashicons, or a custom svg element.
 	 */
-	icon: 'smiley',
+	icon: 'archive',
 
 	/**
 	 * Optional block extended support features.

@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:     Starter Block
- * Description:     Example block written with ESNext standard and JSX support – build step required.
+ * Plugin Name:     Category Archives Block
+ * Description:     The Category Archives Block displays a monthly or yearly archive of posts for one specific category.
  * Version:         0.1.0
  * Author:          The WordPress Contributors
  * License:         GPL-2.0-or-later
@@ -21,7 +21,7 @@
  *
  * @return string Returns the post content with archives added.
  */
-function render_block_core_archives_3( $attributes ) {
+function render_block_category_archive( $attributes ) {
 	$show_post_count = ! empty( $attributes['showPostCounts'] );
 
 	$class = '';
@@ -137,7 +137,7 @@ function create_block_starter_block_block_init() {
 	);
 	wp_set_script_translations( 'create-block-starter-block-block-editor', 'starter-block' );
 
-	$editor_css = 'build/index.css';
+	$editor_css = 'build/style-index.css';
 	wp_register_style(
 		'create-block-starter-block-block-editor',
 		plugins_url( $editor_css, __FILE__ ),
@@ -169,7 +169,7 @@ function create_block_starter_block_block_init() {
 				'default' => false,
 				),
 			),
-			'render_callback' => 'render_block_core_archives_3',
+			'render_callback' => 'render_block_category_archive',
 		)
 	);
 }
