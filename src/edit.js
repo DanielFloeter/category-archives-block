@@ -22,7 +22,7 @@ const CATEGORIES_LIST_QUERY = {
 };
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { showPostCounts, groupBy, order, categories } = attributes;
+	const { showPostCounts, groupBy, order, orderBy, categories } = attributes;
 	const [ categoriesList, setCategoriesList ] = useState( [] );
 	const categorySuggestions = categoriesList.reduce(
 		( accumulator, category ) => ( {
@@ -105,7 +105,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<QueryControls
-						{ ...{ order } }
+						{ ...{ order, orderBy } }
 						onOrderChange={ ( value ) =>
 							setAttributes( { order: value } )
 						}

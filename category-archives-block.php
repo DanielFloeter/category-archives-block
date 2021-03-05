@@ -27,6 +27,12 @@ function render_block_category_archive( $attributes ) {
 	$show_post_count = ! empty( $attributes['showPostCounts'] );
 
 	$class = '';
+	
+	add_filter( 'getarchives_where', function( $x ) use ( $attributes ) {
+			return custom_archive_by_category_where( $x, $attributes );
+		}
+	);
+	add_filter( 'getarchives_join', 'custom_archive_by_category_join' );
 
 	if ( ! empty( $attributes['displayAsDropdown'] ) ) {
 
@@ -42,6 +48,7 @@ function render_block_category_archive( $attributes ) {
 				'type'            => 'monthly',
 				'format'          => 'option',
 				'show_post_count' => $show_post_count,
+				'order'           => $attributes['order'],
 			)
 		);
 
@@ -88,12 +95,16 @@ function render_block_category_archive( $attributes ) {
 		array(
 			'type'            => $attributes['groupBy'],
 			'show_post_count' => $show_post_count,
+			'order'           => $attributes['order'],
 		)
 	);
 
 	$archives_args['echo'] = 0;
-
+	
 	$archives = wp_get_archives( $archives_args );
+
+	remove_filter( 'getarchives_where', 'custom_archive_by_category_where' );
+	remove_filter( 'getarchives_join', 'custom_archive_by_category_join' );
 
 	$classnames = esc_attr( $class );
 
@@ -112,6 +123,39 @@ function render_block_category_archive( $attributes ) {
 		$wrapper_attributes,
 		$archives
 	);
+}
+
+/**
+ * Filter over table term_taxonomy
+ */
+function custom_archive_by_category_join( $x ) {
+    global $wpdb;
+    return $x . " INNER JOIN $wpdb->term_relationships" . 
+				" ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id)" . 
+				" INNER JOIN $wpdb->term_taxonomy" . 
+				" ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)";
+}
+
+/**
+ * Filter categories
+ */
+function custom_archive_by_category_where( $x, $categories ) {
+    global $wpdb;
+
+	$i = 0;
+	$includeIds = '';
+	foreach( $categories['categories'] as $category ) {
+		$current_term = get_term_by( 'id', $category['id'], 'category' );
+		if (is_wp_error( $current_term ) ) {
+			return $x;
+		}
+		if( $i !== 0 ) { 
+			$includeIds .= ','; 
+		}
+		$includeIds .= $current_term->term_id;
+		$i++;
+	}
+	return $x . " AND $wpdb->term_taxonomy.taxonomy = 'category' AND $wpdb->term_taxonomy.term_id IN ( $includeIds )";
 }
 
 /**
