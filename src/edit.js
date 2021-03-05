@@ -17,12 +17,12 @@ export default function Edit( { attributes, setAttributes } ) {
 						label={ __( 'Group by' ) }
 						selected={ groupBy }
 						options={ [
-							{ label: 'Month', value: 'm' },
-							{ label: 'Year', value: 'y' },
+							{ label: 'Month', value: 'monthly' },
+							{ label: 'Year', value: 'yearly' },
 						] }
-						onChange={ () =>
+						onChange={ ( groupBy ) =>
 							setAttributes( {
-								groupBy
+								groupBy,
 							} )
 						}
 					/>

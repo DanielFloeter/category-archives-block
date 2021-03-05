@@ -86,7 +86,7 @@ function render_block_category_archive( $attributes ) {
 	$archives_args = apply_filters(
 		'widget_archives_args',
 		array(
-			'type'            => 'monthly',
+			'type'            => $attributes['groupBy'],
 			'show_post_count' => $show_post_count,
 		)
 	);
@@ -97,7 +97,7 @@ function render_block_category_archive( $attributes ) {
 
 	$classnames = esc_attr( $class );
 
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classnames ) ); echo $wrapper_attributes;
+	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classnames ) );
 
 	if ( empty( $archives ) ) {
 		return sprintf(
@@ -167,8 +167,8 @@ function category_archives_block_init() {
 				'default'        => false,
 				),
 				'groupBy' => array(
-				'type'    => 'boolean',
-				'default' => false,
+				'type'    => 'string',
+				'default' => 'monthly',
 				),
 			),
 			'render_callback' => 'render_block_category_archive',
