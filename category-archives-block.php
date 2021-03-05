@@ -170,6 +170,26 @@ function category_archives_block_init() {
 				'type'    => 'string',
 				'default' => 'monthly',
 				),
+				'order' => array(
+					'type'    => 'string',
+					'default' => 'desc',
+				),
+				'orderBy' => array(
+					'type'    => 'string',
+					'default' => 'date',
+				),
+				'categorySuggestions' => array(
+					'type'    => 'array',
+					'default' => [],
+				),
+				'selectCategories' => array(
+					'type'    => 'array',
+					'default' => '',
+				),
+				'categories' => array(
+					'type'    => 'array',
+					'default' => [],
+				),
 			),
 			'render_callback' => 'render_block_category_archive',
 		)
