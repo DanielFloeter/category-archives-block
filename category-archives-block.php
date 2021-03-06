@@ -146,6 +146,10 @@ function category_archives_block_join( $x ) {
 function category_archives_block_where( $x, $categories ) {
     global $wpdb;
 
+	if ( empty( $categories['categories'] ) ) {
+		return $x;
+	}
+
 	$i = 0;
 	$includeIds = '';
 	foreach( $categories['categories'] as $category ) {
