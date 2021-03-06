@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Category Archives Block
  * Plugin URI:      https://wordpress.org/plugins/category-archives-block/
- * Description:     Displays a monthly or yearly archive of posts for one specific category.
+ * Description:     Displays a monthly or yearly archive of posts for one or more specific categories.
  * Version:         0.1.0
  * Author:          TipTopPress
  * Author URI:      http://tiptoppress.com
@@ -13,6 +13,9 @@
  * @package         tiptip
  */
 
+namespace categoryArchivesBlock;
+
+const VERSION        = '0.1.0';
 
 /**
  * Renders the `tiptip/category-archives-block` on server.
@@ -23,16 +26,16 @@
  *
  * @return string Returns the post content with archives added.
  */
-function render_block_category_archive( $attributes ) {
+function render_category_archives_block( $attributes ) {
 	$show_post_count = ! empty( $attributes['showPostCounts'] );
 
 	$class = '';
 	
 	add_filter( 'getarchives_where', function( $x ) use ( $attributes ) {
-			return custom_archive_by_category_where( $x, $attributes );
+			return category_archives_block_where( $x, $attributes );
 		}
 	);
-	add_filter( 'getarchives_join', 'custom_archive_by_category_join' );
+	add_filter( 'getarchives_join', __NAMESPACE__ . '\category_archives_block_join' );
 
 	if ( ! empty( $attributes['displayAsDropdown'] ) ) {
 
@@ -103,8 +106,8 @@ function render_block_category_archive( $attributes ) {
 	
 	$archives = wp_get_archives( $archives_args );
 
-	remove_filter( 'getarchives_where', 'custom_archive_by_category_where' );
-	remove_filter( 'getarchives_join', 'custom_archive_by_category_join' );
+	remove_filter( 'getarchives_where', __NAMESPACE__ . '\category_archives_block_where' );
+	remove_filter( 'getarchives_join', __NAMESPACE__ . '\category_archives_block_join' );
 
 	$classnames = esc_attr( $class );
 
@@ -128,7 +131,7 @@ function render_block_category_archive( $attributes ) {
 /**
  * Filter over table term_taxonomy
  */
-function custom_archive_by_category_join( $x ) {
+function category_archives_block_join( $x ) {
     global $wpdb;
     return $x . " INNER JOIN $wpdb->term_relationships" . 
 				" ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id)" . 
@@ -139,7 +142,7 @@ function custom_archive_by_category_join( $x ) {
 /**
  * Filter categories
  */
-function custom_archive_by_category_where( $x, $categories ) {
+function category_archives_block_where( $x, $categories ) {
     global $wpdb;
 
 	$i = 0;
@@ -188,7 +191,8 @@ function category_archives_block_init() {
 		'tiptip-category-archives-block-editor',
 		plugins_url( $editor_css, __FILE__ ),
 		array(),
-		filemtime( "$dir/$editor_css" )
+		filemtime( "$dir/$editor_css" ),
+		VERSION
 	);
 
 	$style_css = 'build/style-index.css';
@@ -196,7 +200,8 @@ function category_archives_block_init() {
 		'tiptip-category-archives-block',
 		plugins_url( $style_css, __FILE__ ),
 		array(),
-		filemtime( "$dir/$style_css" )
+		filemtime( "$dir/$style_css" ),
+		VERSION
 	);
 
 	register_block_type(
@@ -235,8 +240,8 @@ function category_archives_block_init() {
 					'default' => [],
 				),
 			),
-			'render_callback' => 'render_block_category_archive',
+			'render_callback' => __NAMESPACE__ . '\render_category_archives_block',
 		)
 	);
 }
-add_action( 'init', 'category_archives_block_init' );
+add_action( 'init', __NAMESPACE__ . '\category_archives_block_init' );

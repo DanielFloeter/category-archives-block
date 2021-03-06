@@ -29,7 +29,7 @@ registerBlockType( 'tiptip/category-archives-block', {
 	 * It will be shown in the Block Tab in the Settings Sidebar.
 	 */
 	description: __(
-		'Displays a monthly or yearly archive of posts for one specific category.',
+		'Displays a monthly or yearly archive of posts for one or more specific categories.',
 		'category-archives-block'
 	),
 

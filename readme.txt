@@ -9,19 +9,21 @@ Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Dsplays a monthly or yearly archive of posts for one specific category. 
+Dsplays a monthly or yearly archive of posts for one or more specific categories.
 
 == Description ==
 
-Displays a monthly or yearly archive of posts for one specific category. It is very similar to the WordPress Archives except that it just displays one specific category's posts, not all categories. It can be configured by month or year with or without post counts.
+Displays a monthly or yearly archive of posts for one or more specific categories. It is very similar to the WordPress Archives except that it just displays one specific category's posts, not all categories. It can be configured by month or year with or without post counts.
 
 = Features =
+* Option to select multi categories
 * Option group by month or year
 * Option show post counts
+* Option to order
 
 = Contribute =
 While using this plugin if you find any bug or any conflict, please submit an issue at
-[Github](https://github.com/tiptoppress/category-posts-widget) (If possible with a pull request).
+[Github](https://github.com/DanielFloeter/category-archives-block) (If possible with a pull request).
 
 == Installation ==
 
@@ -37,7 +39,7 @@ e.g.
 
 = How is the Cateogry Archives Block different than the built-in Archive widget? =
 
-The Category Archives Block lets you show posts for one specific category.  The built-in Archive widget shows posts for all categories.
+The Category Archives Block lets you show posts for one or more specific categories.  The built-in Archive widget shows posts for all categories.
 
 == Screenshots ==
 
