@@ -22,7 +22,7 @@ const CATEGORIES_LIST_QUERY = {
 };
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { showPostCounts, groupBy, order, orderBy, categories } = attributes;
+	const { showPostCounts, displayAsDropdown, groupBy, order, orderBy, categories } = attributes;
 	const [ categoriesList, setCategoriesList ] = useState( [] );
 	const categorySuggestions = categoriesList.reduce(
 		( accumulator, category ) => ( {
@@ -92,6 +92,15 @@ export default function Edit( { attributes, setAttributes } ) {
 						onChange={ ( groupBy ) =>
 							setAttributes( {
 								groupBy,
+							} )
+						}
+					/>
+					<ToggleControl
+						label={ __( 'Display as dropdown' ) }
+						checked={ displayAsDropdown }
+						onChange={ () =>
+							setAttributes( {
+								displayAsDropdown: ! displayAsDropdown,
 							} )
 						}
 					/>

@@ -13,11 +13,12 @@ Dsplays a monthly or yearly archive of posts for one or more specific categories
 
 == Description ==
 
-Displays a monthly or yearly archive of posts for one or more specific categories. It is very similar to the WordPress Archives except that it just displays one specific category's posts, not all categories. It can be configured by month or year with or without post counts.
+Displays a monthly or yearly archive of posts for one or more specific categories. It is very similar to the WordPress Archives except that it can displays one or more specific category's posts, not only all categories. It can be configured to either show a listing or a pulldown by month or year with or without post counts.
 
 = Features =
 * Option to select multi categories
 * Option group by month or year
+* Option to either show a listing or a pulldown
 * Option show post counts
 * Option to order
 

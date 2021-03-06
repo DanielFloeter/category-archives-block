@@ -48,7 +48,7 @@ function render_category_archives_block( $attributes ) {
 		$dropdown_args = apply_filters(
 			'widget_archives_dropdown_args',
 			array(
-				'type'            => 'monthly',
+				'type'            => $attributes['groupBy'],
 				'format'          => 'option',
 				'show_post_count' => $show_post_count,
 				'order'           => $attributes['order'],
@@ -97,6 +97,7 @@ function render_category_archives_block( $attributes ) {
 		'widget_archives_args',
 		array(
 			'type'            => $attributes['groupBy'],
+			'format'          => 'custom',
 			'show_post_count' => $show_post_count,
 			'order'           => $attributes['order'],
 		)
@@ -191,8 +192,7 @@ function category_archives_block_init() {
 		'tiptip-category-archives-block-editor',
 		plugins_url( $editor_css, __FILE__ ),
 		array(),
-		filemtime( "$dir/$editor_css" ),
-		VERSION
+		filemtime( "$dir/$editor_css" )
 	);
 
 	$style_css = 'build/style-index.css';
@@ -200,8 +200,7 @@ function category_archives_block_init() {
 		'tiptip-category-archives-block',
 		plugins_url( $style_css, __FILE__ ),
 		array(),
-		filemtime( "$dir/$style_css" ),
-		VERSION
+		filemtime( "$dir/$style_css" )
 	);
 
 	register_block_type(
@@ -212,6 +211,10 @@ function category_archives_block_init() {
 			'style'         => 'tiptip-category-archives-block',
 			'attributes'    => array(
 				'showPostCounts' => array(
+				'type'           => 'boolean',
+				'default'        => false,
+				),
+				'displayAsDropdown' => array(
 				'type'           => 'boolean',
 				'default'        => false,
 				),
