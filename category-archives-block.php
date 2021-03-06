@@ -27,15 +27,17 @@ const VERSION        = '0.1.0';
  * @return string Returns the post content with archives added.
  */
 function render_category_archives_block( $attributes ) {
+	global $attr;
+
+	$attr = $attributes;
+
 	$show_post_count = ! empty( $attributes['showPostCounts'] );
 
 	$class = '';
 	
-	add_filter( 'getarchives_where', function( $x ) use ( $attributes ) {
-			return category_archives_block_where( $x, $attributes );
-		}
-	);
+	add_filter( 'getarchives_where', __NAMESPACE__ . '\category_archives_block_where' );
 	add_filter( 'getarchives_join', __NAMESPACE__ . '\category_archives_block_join' );
+	add_filter( 'get_archives_link', __NAMESPACE__ . '\category_archives_block_archives_url' );
 
 	if ( ! empty( $attributes['displayAsDropdown'] ) ) {
 
@@ -109,6 +111,7 @@ function render_category_archives_block( $attributes ) {
 
 	remove_filter( 'getarchives_where', __NAMESPACE__ . '\category_archives_block_where' );
 	remove_filter( 'getarchives_join', __NAMESPACE__ . '\category_archives_block_join' );
+	remove_filter( 'get_archives_link', __NAMESPACE__ . '\category_archives_block_archives_url' );
 
 	$classnames = esc_attr( $class );
 
@@ -130,29 +133,22 @@ function render_category_archives_block( $attributes ) {
 }
 
 /**
- * Filter over table term_taxonomy
+ * Add Url params for categories
  */
-function category_archives_block_join( $x ) {
-    global $wpdb;
-    return $x . " INNER JOIN $wpdb->term_relationships" . 
-				" ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id)" . 
-				" INNER JOIN $wpdb->term_taxonomy" . 
-				" ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)";
-}
+function category_archives_block_archives_url( $links ) {
+	global $attr;
 
-/**
- * Filter categories
- */
-function category_archives_block_where( $x, $categories ) {
-    global $wpdb;
-
-	if ( empty( $categories['categories'] ) ) {
-		return $x;
+	if( empty( $attr['categories'] ) ) {
+		return $links;
 	}
+
+	$pattern = '/<a\s+(?:[^>]*?\s+)?href=(["\'])(.*?)\1/';
+	preg_match( $pattern, $links, $matches );
+	$splitUrl = explode( "?", $matches[2] );
 
 	$i = 0;
 	$includeIds = '';
-	foreach( $categories['categories'] as $category ) {
+	foreach( $attr['categories'] as $category ) {
 		$current_term = get_term_by( 'id', $category['id'], 'category' );
 		if (is_wp_error( $current_term ) ) {
 			return $x;
@@ -163,6 +159,46 @@ function category_archives_block_where( $x, $categories ) {
 		$includeIds .= $current_term->term_id;
 		$i++;
 	}
+
+	return str_replace( $matches[2], $splitUrl[0] . '?cat=' . $includeIds, $links );
+}
+
+/**
+ * Filter over table term_taxonomy
+ */
+function category_archives_block_join( $x ) {
+    global $wpdb;
+
+    return $x . " INNER JOIN $wpdb->term_relationships" . 
+				" ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id)" . 
+				" INNER JOIN $wpdb->term_taxonomy" . 
+				" ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)";
+}
+
+/**
+ * Filter categories
+ */
+function category_archives_block_where( $x ) {
+    global $wpdb, $attr;
+
+	if ( empty( $attr['categories'] ) ) {
+		return $x;
+	}
+
+	$i = 0;
+	$includeIds = '';
+	foreach( $attr['categories'] as $category ) {
+		$current_term = get_term_by( 'id', $category['id'], 'category' );
+		if (is_wp_error( $current_term ) ) {
+			return $x;
+		}
+		if( $i !== 0 ) { 
+			$includeIds .= ','; 
+		}
+		$includeIds .= $current_term->term_id;
+		$i++;
+	}
+
 	return $x . " AND $wpdb->term_taxonomy.taxonomy = 'category' AND $wpdb->term_taxonomy.term_id IN ( $includeIds )";
 }
 
