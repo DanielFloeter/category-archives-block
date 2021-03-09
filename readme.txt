@@ -16,7 +16,7 @@ Dsplays a monthly or yearly archive of posts for one or more specific categories
 Displays a monthly or yearly archive of posts for one or more specific categories. It is very similar to the WordPress Archives except that it can displays one or more specific category's posts, not only all categories. It can be configured to either show a listing or a pulldown by month or year with or without post counts.
 
 = Features =
-* Option to select multi categories
+* Option multi category selection
 * Option group by month or year
 * Option to either show a listing or a pulldown
 * Option show post counts
@@ -49,7 +49,7 @@ The Category Archives Block lets you show posts for one or more specific categor
 
 == Changelog ==
 
-= 0.1.0 =
+= 0.1.0 - March 9th 2021 =
 * Release
 
 == Arbitrary section ==
