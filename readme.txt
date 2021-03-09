@@ -9,11 +9,11 @@ Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Dsplays a monthly or yearly archive of posts for one or more specific categories.
+Displays a monthly or yearly archive of posts for one or more specific categories.
 
 == Description ==
 
-Displays a monthly or yearly archive of posts for one or more specific categories. It is very similar to the WordPress Archives except that it can displays one or more specific category's posts, not only all categories. It can be configured to either show a listing or a pulldown by month or year with or without post counts.
+Displays a archive of posts for one or more specific categories. It can be configured to either show by month or year with post counts and as a listing or a pulldown .
 
 = Features =
 * Option multi category selection
@@ -23,8 +23,7 @@ Displays a monthly or yearly archive of posts for one or more specific categorie
 * Option to order
 
 = Contribute =
-While using this plugin if you find any bug or any conflict, please submit an issue at
-[Github](https://github.com/DanielFloeter/category-archives-block) (If possible with a pull request).
+While using this plugin if you find any bug or any conflict, please submit an issue at [Github](https://github.com/DanielFloeter/category-archives-block) (If possible with a pull request).
 
 == Installation ==
 
@@ -52,8 +51,3 @@ The Category Archives Block lets you show posts for one or more specific categor
 = 0.1.0 - March 9th 2021 =
 * Release
 
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
