@@ -2,8 +2,8 @@
 Contributors:      kometschuh
 Donate link:       https://www.paypal.com/donate/?hosted_button_id=RSR28JGA4M7JC
 Tags:              block, category, archive
-Requires at least: 5.6.0
-Tested up to:      5.6.0
+Requires at least: 5.6
+Tested up to:      5.6
 Stable tag:        0.1.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
