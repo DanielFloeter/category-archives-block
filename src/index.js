@@ -33,6 +33,21 @@ registerBlockType( 'tiptip/category-archives-block', {
 		'category-archives-block'
 	),
 
+	keywords: [
+		__( 'monthly' ),
+		__( 'yearly' ),
+		__( 'tiptoppress' ),
+	],
+
+	example: {
+		attributes: {
+			values:
+				'<ul><a>January 2021</a><a>December 2020</a><a>November 2020</a><a>October 2020</a></ul>',
+			showPostCounts: 
+				true,
+		},
+	},
+
 	/**
 	 * Blocks are grouped into categories to help users browse and discover them.
 	 * The categories provided by core are `text`, `media`, `design`, `widgets`, and `embed`.
