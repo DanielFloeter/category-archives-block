@@ -4,7 +4,7 @@ Donate link:       https://www.paypal.com/donate/?hosted_button_id=RSR28JGA4M7JC
 Tags:              block, category, archive, archives, yearly
 Requires at least: 5.6
 Tested up to:      5.7
-Stable tag:        0.1.0
+Stable tag:        0.1.1
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,9 @@ The Category Archives Block lets you show posts for one or more specific categor
 2. The archive displayed as a list with post counts and the archive displayed as a pulldown of years without post counts.
 
 == Changelog ==
+
+= 0.1.1 - March 26th 2021 =
+* Add preview
 
 = 0.1.0 - March 9th 2021 =
 * Release
