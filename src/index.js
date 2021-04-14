@@ -36,6 +36,9 @@ registerBlockType( 'tiptip/category-archives-block', {
 	keywords: [
 		__( 'monthly' ),
 		__( 'yearly' ),
+		__( 'category' ),
+		__( 'archive' ),
+		__( 'archives' ),
 		__( 'tiptoppress' ),
 	],
 
