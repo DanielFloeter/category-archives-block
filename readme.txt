@@ -1,7 +1,7 @@
 === Category Archives Block ===
 Contributors:      kometschuh
 Donate link:       https://www.paypal.com/donate/?hosted_button_id=RSR28JGA4M7JC
-Tags:              block, category, archive, archives, yearly
+Tags:              archive, archives, block, category, gutenberg, yearly
 Requires at least: 5.6
 Tested up to:      5.7
 Stable tag:        0.1.1
@@ -13,7 +13,7 @@ Displays a monthly or yearly archive of posts for one or more specific categorie
 
 == Description ==
 
-Displays a archive of posts for one or more specific categories. It can be configured to either show by month or year with post counts and as a listing or a pulldown .
+Displays a archive of posts for one or more specific categories in the Gutenberg block editor. It can be configured to either show by month or year with post counts and as a listing or a pulldown.
 
 = Features =
 * Option multi category selection
