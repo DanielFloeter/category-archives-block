@@ -6,27 +6,7 @@
 	"icon": "archive",
 	"description": "Displays a monthly or yearly archive of posts for one or more specific categories.",
 	"textdomain": "category-archives-block",
-	"attributes": {
-		"groupBy": {
-			"type": "string",
-			"source": "string",
-			"default": "monthly"
-		},
-		"showPostCounts": {
-			"type": "boolean",
-			"default": false
-		},
-		"selectedCategories": {
-			"type": "array",
-			"default": ""
-		},
-		"order": {
-			"type": "string",
-			"default": "date/desc"
-		}
-	},
 	"supports": {
-		"align": true,
 		"html": false
 	},
 	"editorScript": "file:./build/index.js",
