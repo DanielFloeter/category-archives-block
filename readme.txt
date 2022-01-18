@@ -3,7 +3,7 @@ Contributors:      kometschuh
 Donate link:       https://www.paypal.com/donate/?hosted_button_id=RSR28JGA4M7JC
 Tags:              archive, archives, block, category, gutenberg, yearly
 Requires at least: 5.6
-Tested up to:      5.8
+Tested up to:      5.9
 Stable tag:        0.1.1
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
@@ -14,6 +14,9 @@ Displays a monthly or yearly archive of posts for one or more specific categorie
 == Description ==
 
 Displays a archive of posts for one or more specific categories in the Gutenberg block editor. It can be configured to either show by month or year with post counts and as a listing or a pulldown.
+
+= Tip Top Press =
+We're [Tip Top Press](http://tiptoppress.com/) and create Gutenberg Blocks for Wordpress. If you want to know about what we're working on and you are interested in backgrounds then you can read all newes storys on our [blog](http://tiptoppress.com/blog/?utm_source=wp.org&utm_medium=readme.txt&utm_campaign=category+archives+block).
 
 = Features =
 * Option multi category selection
