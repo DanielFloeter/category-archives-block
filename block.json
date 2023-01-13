@@ -6,8 +6,65 @@
 	"icon": "archive",
 	"description": "Displays a monthly or yearly archive of posts for one or more specific categories.",
 	"textdomain": "category-archives-block",
+	"attributes": {
+		"showPostCounts": {
+			"type": "boolean",
+			"default": false
+		},
+		"displayAsDropdown": {
+			"type": "boolean",
+			"default": false
+		},
+		"groupBy": {
+			"type": "string",
+			"default": "monthly"
+		},
+		"order": {
+			"type": "string",
+			"default": "desc"
+		},
+		"orderBy": {
+			"type": "string",
+			"default": "date"
+		},
+		"categorySuggestions": {
+			"type": "array",
+			"default": []
+		},
+		"selectCategories": {
+			"type": "array",
+			"default": ""
+		},
+		"categories": {
+			"type": "array",
+			"default": []
+		}
+	},
 	"supports": {
-		"html": false
+		"align": true,
+		"html": false,
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
+		"color": {
+			"background": true,
+			"link": true,
+			"text": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontStyle": true,
+			"__experimentalTextTransform": true,
+			"__experimentalTextDecoration": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalDefaultControls": {
+				"fontSize": true
+			}
+		}
 	},
 	"editorScript": "file:./build/index.js",
 	"editorStyle": "file:./build/style-index.css",

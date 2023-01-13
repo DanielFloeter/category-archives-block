@@ -3,8 +3,8 @@ Contributors:      kometschuh
 Donate link:       https://www.paypal.com/donate/?hosted_button_id=RSR28JGA4M7JC
 Tags:              archive, archives, block, category, gutenberg, yearly
 Requires at least: 5.6
-Tested up to:      6.0
-Stable tag:        0.1.1
+Tested up to:      5.9
+Stable tag:        1.0.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,6 +24,7 @@ We're [Tip Top Press](http://tiptoppress.com/) and create Gutenberg Blocks for W
 * Option to either show a listing or a pulldown
 * Option show post counts
 * Option to order
+* Option for spacing, color and typography
 
 = Contribute =
 While using this plugin if you find any bug or any conflict, please submit an issue at [Github](https://github.com/DanielFloeter/category-archives-block) (If possible with a pull request).
@@ -50,6 +51,9 @@ The Category Archives Block lets you show posts for one or more specific categor
 2. The archive displayed as a list with post counts and the archive displayed as a pulldown of years without post counts.
 
 == Changelog ==
+
+= 1.0.0 - January 13th 2023 =
+* Add spacing, color and typography
 
 = 0.1.1 - March 26th 2021 =
 * Add preview

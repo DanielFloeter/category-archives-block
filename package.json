@@ -1,6 +1,6 @@
 {
 	"name": "category-archives-block",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"description": "Displays a monthly or yearly archive of posts for one ore more specific categories.",
 	"author": "kometschuh",
 	"license": "GPL-2.0-or-later",

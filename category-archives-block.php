@@ -3,7 +3,7 @@
  * Plugin Name:     Category Archives Block
  * Plugin URI:      https://wordpress.org/plugins/category-archives-block/
  * Description:     Displays a monthly or yearly archive of posts for one or more specific categories.
- * Version:         0.1.1
+ * Version:         1.0.0
  * Author:          TipTopPress
  * Author URI:      http://tiptoppress.com
  * License:         GPL-2.0-or-later
@@ -15,7 +15,7 @@
 
 namespace categoryArchivesBlock;
 
-const VERSION        = '0.1.1';
+const VERSION        = '1.0.0';
 
 /**
  * Renders the `tiptip/category-archives-block` on server.
@@ -243,46 +243,9 @@ function category_archives_block_init() {
 		filemtime( "$dir/$style_css" )
 	);
 
-	register_block_type(
-		'tiptip/category-archives-block',
+	register_block_type_from_metadata(
+		__DIR__,
 		array(
-			'editor_script' => 'tiptip-category-archives-block-editor',
-			'editor_style'  => 'tiptip-category-archives-block-editor',
-			'style'         => 'tiptip-category-archives-block',
-			'attributes'    => array(
-				'showPostCounts' => array(
-				'type'           => 'boolean',
-				'default'        => false,
-				),
-				'displayAsDropdown' => array(
-				'type'           => 'boolean',
-				'default'        => false,
-				),
-				'groupBy' => array(
-				'type'    => 'string',
-				'default' => 'monthly',
-				),
-				'order' => array(
-					'type'    => 'string',
-					'default' => 'desc',
-				),
-				'orderBy' => array(
-					'type'    => 'string',
-					'default' => 'date',
-				),
-				'categorySuggestions' => array(
-					'type'    => 'array',
-					'default' => [],
-				),
-				'selectCategories' => array(
-					'type'    => 'array',
-					'default' => '',
-				),
-				'categories' => array(
-					'type'    => 'array',
-					'default' => [],
-				),
-			),
 			'render_callback' => __NAMESPACE__ . '\render_category_archives_block',
 		)
 	);
