@@ -7,6 +7,10 @@
 	"description": "Displays a monthly or yearly archive of posts for one or more specific categories.",
 	"textdomain": "category-archives-block",
 	"attributes": {
+		"showMonthOrYear": {
+			"type": "boolean",
+			"default": false
+		},
 		"showPostCounts": {
 			"type": "boolean",
 			"default": false

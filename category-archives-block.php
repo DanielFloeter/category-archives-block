@@ -3,7 +3,7 @@
  * Plugin Name:     Category Archives Block
  * Plugin URI:      https://wordpress.org/plugins/category-archives-block/
  * Description:     Displays a monthly or yearly archive of posts for one or more specific categories.
- * Version:         1.0.0
+ * Version:         1.0.1
  * Author:          TipTopPress
  * Author URI:      http://tiptoppress.com
  * License:         GPL-2.0-or-later
@@ -15,7 +15,7 @@
 
 namespace categoryArchivesBlock;
 
-const VERSION        = '1.0.0';
+const VERSION        = '1.0.1';
 
 /**
  * Renders the `tiptip/category-archives-block` on server.
@@ -34,6 +34,8 @@ function render_category_archives_block( $attributes ) {
 	$show_post_count = ! empty( $attributes['showPostCounts'] );
 
 	$class = '';
+
+	update_option( 'category_archives_showMonthOrYear', $attributes['showMonthOrYear'] );
 	
 	add_filter( 'getarchives_where', __NAMESPACE__ . '\category_archives_block_where' );
 	add_filter( 'getarchives_join', __NAMESPACE__ . '\category_archives_block_join' );
@@ -201,6 +203,39 @@ function category_archives_block_where( $x ) {
 
 	return $x . " AND $wpdb->term_taxonomy.taxonomy = 'category' AND $wpdb->term_taxonomy.term_id IN ( $includeIds )";
 }
+
+/**
+ * Page Title shows Month or Year on result page
+ */
+function category_archives_archive_page_title( $title ) {
+	$prefix = '';
+
+	$show_month_or_year = get_option( 'category_archives_showMonthOrYear', false );
+
+	if ( $show_month_or_year ) {
+		if ( is_archive() ) {
+			if ( is_year() ) {
+				$title  = get_the_date( _x( 'Y', 'yearly archives date format' ) );
+				$prefix = _x( 'Year:', 'date archive title prefix' );
+			} elseif ( is_month() ) {
+				$title  = get_the_date( _x( 'F Y', 'monthly archives date format' ) );
+				$prefix = _x( 'Month:', 'date archive title prefix' );
+			}
+			$prefix = apply_filters( 'get_the_archive_title_prefix', $prefix );
+			if ( $prefix ) {
+				$title = sprintf(
+					/* translators: 1: Title prefix. 2: Title. */
+					_x( '%1$s %2$s', 'archive title' ),
+					$prefix,
+					'<span>' . $title . '</span>'
+				);
+			}
+		}
+	}
+ 
+	return $title;
+}
+add_filter( 'get_the_archive_title', __NAMESPACE__ . '\category_archives_archive_page_title', 5 );
 
 /**
  * Registers all block assets so that they can be enqueued through the block editor

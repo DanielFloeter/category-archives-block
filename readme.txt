@@ -3,8 +3,8 @@ Contributors:      kometschuh
 Donate link:       https://www.paypal.com/donate/?hosted_button_id=RSR28JGA4M7JC
 Tags:              archive, archives, block, category, gutenberg, yearly
 Requires at least: 5.6
-Tested up to:      5.9
-Stable tag:        1.0.0
+Tested up to:      6.3
+Stable tag:        1.0.1
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -51,6 +51,9 @@ The Category Archives Block lets you show posts for one or more specific categor
 2. The archive displayed as a list with post counts and the archive displayed as a pulldown of years without post counts.
 
 == Changelog ==
+
+= 1.0.1 - July 30th 2023 =
+* Add option to adapt the title on archives pages
 
 = 1.0.0 - January 13th 2023 =
 * Add spacing, color and typography

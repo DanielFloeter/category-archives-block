@@ -22,7 +22,7 @@ const CATEGORIES_LIST_QUERY = {
 };
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { showPostCounts, displayAsDropdown, groupBy, order, orderBy, categories } = attributes;
+	const { showMonthOrYear, showPostCounts, displayAsDropdown, groupBy, order, orderBy, categories } = attributes;
 	const [ categoriesList, setCategoriesList ] = useState( [] );
 	const categorySuggestions = categoriesList.reduce(
 		( accumulator, category ) => ( {
@@ -110,6 +110,15 @@ export default function Edit( { attributes, setAttributes } ) {
 						onChange={ () =>
 							setAttributes( {
 								showPostCounts: ! showPostCounts,
+							} )
+						}
+					/>
+					<ToggleControl
+						label={ __( 'Adapt Title on Result Page' ) }
+						checked={ showMonthOrYear }
+						onChange={ () =>
+							setAttributes( {
+								showMonthOrYear: ! showMonthOrYear,
 							} )
 						}
 					/>
