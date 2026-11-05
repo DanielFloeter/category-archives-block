@@ -1,0 +1,21 @@
+# Files and folders left out of the release (ZIP / WordPress.org SVN trunk).
+# Read by `wp dist-archive` and 10up/action-wordpress-plugin-deploy.
+
+# Version control and editor files
+/.git
+/.github
+.gitignore
+.distignore
+.DS_Store
+
+# Development dependencies and sources (the release ships build/)
+/node_modules
+/src
+package.json
+package-lock.json
+
+# Tests
+/tests
+
+# WordPress.org directory assets go to the SVN assets/ folder, not trunk/
+/assets

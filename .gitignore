@@ -1,2 +1,9 @@
+# Dependencies and build output
 node_modules/
 build/
+
+# Test artifacts
+.phpunit.result.cache
+
+# OS files
+.DS_Store
