@@ -351,19 +351,63 @@ function category_archives_archive_page_title( $title ) {
 		return $title;
 	}
 
-	$prefix = apply_filters( 'get_the_archive_title_prefix', $prefix );
-	if ( $prefix ) {
-		$title = sprintf(
-			/* translators: 1: Title prefix. 2: Title. */
-			_x( '%1$s %2$s', 'archive title' ),
-			$prefix,
-			'<span>' . $title . '</span>'
-		);
-	}
-
-	return $title;
+	return category_archives_prefixed_title( apply_filters( 'get_the_archive_title_prefix', $prefix ), $title );
 }
 add_filter( 'get_the_archive_title', __NAMESPACE__ . '\category_archives_archive_page_title', 5 );
+
+/**
+ * Page title names every category of the link (?cat=3,7). WordPress itself
+ * only names the first one.
+ *
+ * @param string $title          Archive title.
+ * @param string $original_title Archive title without prefix.
+ * @param string $prefix         Prefix WordPress chose, already filtered.
+ */
+function category_archives_categories_page_title( $title, $original_title = '', $prefix = '' ) {
+	global $wp_query;
+
+	if ( get_query_var( DATE_TITLE_QUERY_VAR ) || ! is_category() || empty( $wp_query->tax_query->queried_terms['category'] ) ) {
+		return $title;
+	}
+
+	// The 'cat' query var only keeps the first ID once the query ran, the
+	// tax query still has all of them.
+	$queried = $wp_query->tax_query->queried_terms['category'];
+	$names   = array();
+	foreach ( (array) $queried['terms'] as $value ) {
+		$term = get_term_by( $queried['field'], $value, 'category' );
+		if ( $term instanceof \WP_Term ) {
+			// Same filter WordPress runs on the single category name.
+			$names[ $term->term_id ] = apply_filters( 'single_cat_title', $term->name );
+		}
+	}
+
+	if ( count( $names ) < 2 ) {
+		return $title;
+	}
+
+	return category_archives_prefixed_title( $prefix, implode( ', ', $names ) );
+}
+add_filter( 'get_the_archive_title', __NAMESPACE__ . '\category_archives_categories_page_title', 5, 3 );
+
+/**
+ * Puts the prefix in front of the title the way get_the_archive_title() does.
+ *
+ * @param string $prefix Already filtered prefix, empty for none.
+ * @param string $title  Title without prefix.
+ */
+function category_archives_prefixed_title( $prefix, $title ) {
+	if ( ! $prefix ) {
+		return $title;
+	}
+
+	return sprintf(
+		/* translators: 1: Title prefix. 2: Title. */
+		_x( '%1$s %2$s', 'archive title' ),
+		$prefix,
+		'<span>' . $title . '</span>'
+	);
+}
 
 /**
  * Removes the global option that versions up to 1.0.4 wrote on every render.

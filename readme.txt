@@ -57,11 +57,11 @@ The date archive of your theme, filtered to the selected categories (e.g. /2026/
 
 = Can the result page show which year, month, week or day is displayed? =
 
-Yes. Select at least one category, then enable "Show date in archive title" in the block settings. The archive page title shows the date (e.g. "Month: May 2026") instead of the category.
+Yes. Select at least one category, then enable "Show date as title on linked archive pages" in the block settings. Archive pages opened from the block's links then show the date (e.g. "Month: May 2026") as their title instead of the categories name.
 
 == Screenshots ==
 
-1. From the Category Archives Block control, you can set the title, category, whether to group by month or year and whether to show post counts.
+1. Choose one or more categories to limit the archive to their posts, and show categories name or the date as title on the linked archive pages.
 2. The archive displayed as a list with post counts and the archive displayed as a pulldown of years without post counts.
 
 == Changelog ==

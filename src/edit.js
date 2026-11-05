@@ -161,11 +161,11 @@ export default function Edit( { attributes, setAttributes } ) {
 					{ categories?.length > 0 && (
 						<ToggleControl
 							label={ __(
-								'Show date in archive title',
+								'Show date as title on linked archive pages',
 								'category-archives-block'
 							) }
 							help={ __(
-								'The archive page title shows the date (e.g. "Month: May 2026") instead of the category.',
+								'Archive pages opened from this block\'s links show the date (e.g. "Month: May 2026") as their title instead of the categories name.',
 								'category-archives-block'
 							) }
 							checked={ showMonthOrYear }

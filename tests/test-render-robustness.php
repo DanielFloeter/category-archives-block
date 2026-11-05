@@ -194,6 +194,32 @@ class Test_Render_Robustness extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'January 2021', $title );
 	}
 
+	/**
+	 * A link for several categories names all of them in the archive title,
+	 * not only the first one as WordPress would.
+	 */
+	public function test_archive_title_names_every_category() {
+		$this->go_to( home_url( '/?m=202101&cat=' . self::$news . ',' . self::$events ) );
+		$this->assertSame( 'Category: <span>News, Events</span>', get_the_archive_title() );
+
+		$this->go_to( home_url( '/?m=202101&cat=' . self::$news ) );
+		$this->assertSame( 'Category: <span>News</span>', get_the_archive_title() );
+
+		// A category that no longer exists is left out.
+		$this->go_to( home_url( '/?m=202101&cat=' . self::$news . ',999999' ) );
+		$this->assertSame( 'Category: <span>News</span>', get_the_archive_title() );
+
+		// The date title wins when the block asks for it.
+		$this->go_to( home_url( '/?m=202101&cat=' . self::$news . ',' . self::$events . '&cab_date_title=1' ) );
+		$this->assertSame( 'Month: <span>January 2021</span>', get_the_archive_title() );
+
+		// The prefix a theme sets is kept, also when it removes it.
+		add_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
+		$this->go_to( home_url( '/?m=202101&cat=' . self::$news . ',' . self::$events ) );
+		$this->assertSame( 'News, Events', get_the_archive_title() );
+		remove_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
+	}
+
 	/*
 	 * 5: no generic global.
 	 */
