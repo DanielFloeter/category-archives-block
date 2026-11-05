@@ -18,6 +18,12 @@ namespace categoryArchivesBlock;
 const VERSION        = '1.0.4';
 
 /**
+ * Query arg on the archive links that asks for the month or year as the
+ * archive page title (the "showMonthOrYear" setting of the linking block).
+ */
+const DATE_TITLE_QUERY_VAR = 'cab_date_title';
+
+/**
  * Renders the `tiptip/category-archives-block` on server.
  *
  * @see WP_Widget_Archives
@@ -27,21 +33,30 @@ const VERSION        = '1.0.4';
  * @return string Returns the post content with archives added.
  */
 function render_category_archives_block( $attributes ) {
-	global $attr;
-
-	$attr = $attributes;
-
 	$show_post_count = ! empty( $attributes['showPostCounts'] );
+	$is_dropdown     = ! empty( $attributes['displayAsDropdown'] );
+
+	$filters = array();
+
+	if ( ! empty( $attributes['categories'] ) ) {
+		$category_ids = get_category_ids( $attributes['categories'] );
+		$date_title   = ! empty( $attributes['showMonthOrYear'] );
+
+		$filters['getarchives_join']  = __NAMESPACE__ . '\category_archives_block_join';
+		$filters['getarchives_where'] = function ( $where ) use ( $category_ids ) {
+			return category_archives_block_where( $where, $category_ids );
+		};
+
+		if ( ! $is_dropdown ) {
+			$filters['get_archives_link'] = function ( $link ) use ( $category_ids, $date_title ) {
+				return category_archives_block_archives_url( $link, $category_ids, $date_title );
+			};
+		}
+	}
 
 	$class = '';
 
-	update_option( 'category_archives_showMonthOrYear', $attributes['showMonthOrYear'] );
-	
-	add_filter( 'getarchives_where', __NAMESPACE__ . '\category_archives_block_where' );
-	add_filter( 'getarchives_join', __NAMESPACE__ . '\category_archives_block_join' );
-	add_filter( 'get_archives_link', __NAMESPACE__ . '\category_archives_block_archives_url' );
-
-	if ( ! empty( $attributes['displayAsDropdown'] ) ) {
+	if ( $is_dropdown ) {
 
 		$class .= ' category-archives-block-dropdown';
 
@@ -61,7 +76,7 @@ function render_category_archives_block( $attributes ) {
 
 		$dropdown_args['echo'] = 0;
 
-		$archives = wp_get_archives( $dropdown_args );
+		$archives = get_filtered_archives( $dropdown_args, $filters );
 
 		switch ( $dropdown_args['type'] ) {
 			case 'yearly':
@@ -107,12 +122,8 @@ function render_category_archives_block( $attributes ) {
 	);
 
 	$archives_args['echo'] = 0;
-	
-	$archives = wp_get_archives( $archives_args );
 
-	remove_filter( 'getarchives_where', __NAMESPACE__ . '\category_archives_block_where' );
-	remove_filter( 'getarchives_join', __NAMESPACE__ . '\category_archives_block_join' );
-	remove_filter( 'get_archives_link', __NAMESPACE__ . '\category_archives_block_archives_url' );
+	$archives = get_filtered_archives( $archives_args, $filters );
 
 	$classnames = esc_attr( $class );
 
@@ -134,74 +145,122 @@ function render_category_archives_block( $attributes ) {
 }
 
 /**
- * Add Url params for categories
+ * Resolves the selected categories to the IDs of those that still exist.
+ *
+ * Categories deleted after they were selected in the block are skipped.
+ *
+ * @param array $categories The block's "categories" attribute.
+ *
+ * @return int[] Term IDs of the existing categories.
  */
-function category_archives_block_archives_url( $links ) {
-	global $attr;
+function get_category_ids( $categories ) {
+	$ids = array();
 
-	if( empty( $attr['categories'] ) || ! empty( $attr['displayAsDropdown'] ) ) {
-		return $links;
+	foreach ( (array) $categories as $category ) {
+		$id = is_array( $category ) && isset( $category['id'] ) ? absint( $category['id'] ) : 0;
+		if ( ! $id ) {
+			continue;
+		}
+
+		$term = get_term( $id, 'category' );
+		if ( $term instanceof \WP_Term ) {
+			$ids[] = (int) $term->term_id;
+		}
 	}
 
+	return array_values( array_unique( $ids ) );
+}
+
+/**
+ * Runs wp_get_archives() with the given filters, and only for that call.
+ *
+ * @param array               $args    Arguments for wp_get_archives().
+ * @param array<string,mixed> $filters Callbacks keyed by hook name.
+ *
+ * @return string|void The archives markup.
+ */
+function get_filtered_archives( $args, $filters ) {
+	foreach ( $filters as $hook => $callback ) {
+		add_filter( $hook, $callback );
+	}
+
+	try {
+		return wp_get_archives( $args );
+	} finally {
+		foreach ( $filters as $hook => $callback ) {
+			remove_filter( $hook, $callback );
+		}
+	}
+}
+
+/**
+ * Points an archive link at the selected categories.
+ *
+ * @param string $link         Archive link HTML.
+ * @param int[]  $category_ids Term IDs of the selected categories.
+ * @param bool   $date_title   Whether the archive page shows the month or year as title.
+ *
+ * @return string The archive link HTML.
+ */
+function category_archives_block_archives_url( $link, $category_ids, $date_title = false ) {
 	$pattern = '/<a\s+(?:[^>]*?\s+)?href=(["\'])(.*?)\1/';
-	preg_match( $pattern, $links, $matches );
-	$splitUrl = explode( "?", $matches[2] );
 
-	$i = 0;
-	$includeIds = '';
-	foreach( $attr['categories'] as $category ) {
-		$current_term = get_term_by( 'id', $category['id'], 'category' );
-		if (is_wp_error( $current_term ) ) {
-			return $x;
-		}
-		if( $i !== 0 ) { 
-			$includeIds .= ','; 
-		}
-		$includeIds .= $current_term->term_id;
-		$i++;
+	if ( empty( $category_ids ) || ! preg_match( $pattern, $link, $matches ) ) {
+		return $link;
 	}
 
-	return str_replace( $matches[2], $splitUrl[0] . '?cat=' . $includeIds, $links );
+	$split_url = explode( '?', $matches[2] );
+	$url       = $split_url[0] . '?cat=' . implode( ',', $category_ids );
+
+	if ( $date_title ) {
+		$url .= '&#038;' . DATE_TITLE_QUERY_VAR . '=1';
+	}
+
+	return str_replace( $matches[2], $url, $link );
 }
 
 /**
  * Filter over table term_taxonomy
  */
-function category_archives_block_join( $x ) {
-    global $wpdb;
+function category_archives_block_join( $join ) {
+	global $wpdb;
 
-    return $x . " INNER JOIN $wpdb->term_relationships" . 
-				" ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id)" . 
-				" INNER JOIN $wpdb->term_taxonomy" . 
+	return $join . " INNER JOIN $wpdb->term_relationships" .
+				" ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id)" .
+				" INNER JOIN $wpdb->term_taxonomy" .
 				" ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)";
 }
 
 /**
  * Filter categories
+ *
+ * @param string $where        WHERE clause of the archives query.
+ * @param int[]  $category_ids Term IDs of the selected categories. Empty when
+ *                             none of them exists any more.
+ *
+ * @return string The WHERE clause.
  */
-function category_archives_block_where( $x ) {
-    global $wpdb, $attr;
+function category_archives_block_where( $where, $category_ids ) {
+	global $wpdb;
 
-	if ( empty( $attr['categories'] ) ) {
-		return $x;
+	// Every selected category is gone: show nothing rather than all posts.
+	if ( empty( $category_ids ) ) {
+		return $where . ' AND 1 = 0';
 	}
 
-	$i = 0;
-	$includeIds = '';
-	foreach( $attr['categories'] as $category ) {
-		$current_term = get_term_by( 'id', $category['id'], 'category' );
-		if (is_wp_error( $current_term ) ) {
-			return $x;
-		}
-		if( $i !== 0 ) { 
-			$includeIds .= ','; 
-		}
-		$includeIds .= $current_term->term_id;
-		$i++;
-	}
+	$include_ids = implode( ',', array_map( 'intval', $category_ids ) );
 
-	return $x . " AND $wpdb->term_taxonomy.taxonomy = 'category' AND $wpdb->term_taxonomy.term_id IN ( $includeIds )";
+	return $where . " AND $wpdb->term_taxonomy.taxonomy = 'category' AND $wpdb->term_taxonomy.term_id IN ( $include_ids )";
 }
+
+/**
+ * Makes the date title query arg known to WP.
+ */
+function category_archives_query_vars( $vars ) {
+	$vars[] = DATE_TITLE_QUERY_VAR;
+	return $vars;
+}
+add_filter( 'query_vars', __NAMESPACE__ . '\category_archives_query_vars' );
 
 /**
  * Page Title shows Month or Year on result page
@@ -209,9 +268,7 @@ function category_archives_block_where( $x ) {
 function category_archives_archive_page_title( $title ) {
 	$prefix = '';
 
-	$show_month_or_year = get_option( 'category_archives_showMonthOrYear', false );
-
-	if ( $show_month_or_year ) {
+	if ( get_query_var( DATE_TITLE_QUERY_VAR ) ) {
 		if ( is_archive() ) {
 			if ( is_year() ) {
 				$title  = get_the_date( _x( 'Y', 'yearly archives date format' ) );
@@ -231,10 +288,21 @@ function category_archives_archive_page_title( $title ) {
 			}
 		}
 	}
- 
+
 	return $title;
 }
 add_filter( 'get_the_archive_title', __NAMESPACE__ . '\category_archives_archive_page_title', 5 );
+
+/**
+ * Removes the global option that versions up to 1.0.4 wrote on every render.
+ * The setting now travels with each block's archive links.
+ */
+function category_archives_delete_legacy_option() {
+	if ( false !== get_option( 'category_archives_showMonthOrYear' ) ) {
+		delete_option( 'category_archives_showMonthOrYear' );
+	}
+}
+add_action( 'admin_init', __NAMESPACE__ . '\category_archives_delete_legacy_option' );
 
 /**
  * Registers all block assets so that they can be enqueued through the block editor
