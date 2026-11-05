@@ -83,7 +83,7 @@ class Test_Render_Robustness extends WP_UnitTestCase {
 		$this->assert_no_db_error();
 		$this->assertStringContainsString( 'January 2021', $rendered );
 		$this->assertStringNotContainsString( 'December 2020', $rendered );
-		$this->assertMatchesRegularExpression( '/\?cat=' . self::$news . '[\'"]/', $rendered );
+		$this->assertMatchesRegularExpression( '/[?;]cat=' . self::$news . '[\'"]/', $rendered );
 	}
 
 	public function test_deleted_category_is_skipped_in_dropdown() {

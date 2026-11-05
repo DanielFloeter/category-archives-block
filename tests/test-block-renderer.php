@@ -74,7 +74,7 @@ class Test_Block_Renderer extends WP_UnitTestCase {
 		$rendered = $response->get_data()['rendered'];
 		$this->assertStringContainsString( 'January 2021', $rendered );
 		$this->assertStringNotContainsString( 'December 2020', $rendered );
-		$this->assertStringContainsString( '?cat=' . self::$news, $rendered );
+		$this->assertMatchesRegularExpression( '/[?;]cat=' . self::$news . '[\'"&]/', $rendered );
 	}
 
 	public function test_renderer_accepts_post_with_id_and_name() {

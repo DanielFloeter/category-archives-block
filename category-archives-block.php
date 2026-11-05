@@ -42,16 +42,12 @@ function render_category_archives_block( $attributes ) {
 		$category_ids = get_category_ids( $attributes['categories'] );
 		$date_title   = ! empty( $attributes['showMonthOrYear'] );
 
-		$filters['getarchives_join']  = __NAMESPACE__ . '\category_archives_block_join';
 		$filters['getarchives_where'] = function ( $where ) use ( $category_ids ) {
 			return category_archives_block_where( $where, $category_ids );
 		};
-
-		if ( ! $is_dropdown ) {
-			$filters['get_archives_link'] = function ( $link ) use ( $category_ids, $date_title ) {
-				return category_archives_block_archives_url( $link, $category_ids, $date_title );
-			};
-		}
+		$filters['get_archives_link'] = function ( $link ) use ( $category_ids, $date_title ) {
+			return category_archives_block_archives_url( $link, $category_ids, $date_title );
+		};
 	}
 
 	$class = '';
@@ -194,7 +190,8 @@ function get_filtered_archives( $args, $filters ) {
 }
 
 /**
- * Points an archive link at the selected categories.
+ * Points an archive link (list item or dropdown option) at the selected
+ * categories, keeping the date part of the URL.
  *
  * @param string $link         Archive link HTML.
  * @param int[]  $category_ids Term IDs of the selected categories.
@@ -203,36 +200,30 @@ function get_filtered_archives( $args, $filters ) {
  * @return string The archive link HTML.
  */
 function category_archives_block_archives_url( $link, $category_ids, $date_title = false ) {
-	$pattern = '/<a\s+(?:[^>]*?\s+)?href=(["\'])(.*?)\1/';
+	$pattern = '/\b(?:href|value)=(["\'])(.*?)\1/';
 
-	if ( empty( $category_ids ) || ! preg_match( $pattern, $link, $matches ) ) {
+	if ( empty( $category_ids ) || ! preg_match( $pattern, $link, $matches, PREG_OFFSET_CAPTURE ) ) {
 		return $link;
 	}
 
-	$split_url = explode( '?', $matches[2] );
-	$url       = $split_url[0] . '?cat=' . implode( ',', $category_ids );
+	list( $old_url, $offset ) = $matches[2];
 
+	$args = array( 'cat' => implode( ',', $category_ids ) );
 	if ( $date_title ) {
-		$url .= '&#038;' . DATE_TITLE_QUERY_VAR . '=1';
+		$args[ DATE_TITLE_QUERY_VAR ] = 1;
 	}
 
-	return str_replace( $matches[2], $url, $link );
-}
+	// The URL in the markup is escaped (& as &#038;), add_query_arg() needs it raw.
+	$url = esc_url( add_query_arg( $args, html_entity_decode( $old_url, ENT_QUOTES ) ) );
 
-/**
- * Filter over table term_taxonomy
- */
-function category_archives_block_join( $join ) {
-	global $wpdb;
-
-	return $join . " INNER JOIN $wpdb->term_relationships" .
-				" ON ($wpdb->posts.ID = $wpdb->term_relationships.object_id)" .
-				" INNER JOIN $wpdb->term_taxonomy" .
-				" ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)";
+	return substr_replace( $link, $url, $offset, strlen( $old_url ) );
 }
 
 /**
  * Filter categories
+ *
+ * Uses a subquery instead of joining the term tables, so a post that is in
+ * several of the selected categories is counted and listed only once.
  *
  * @param string $where        WHERE clause of the archives query.
  * @param int[]  $category_ids Term IDs of the selected categories. Empty when
@@ -250,7 +241,11 @@ function category_archives_block_where( $where, $category_ids ) {
 
 	$include_ids = implode( ',', array_map( 'intval', $category_ids ) );
 
-	return $where . " AND $wpdb->term_taxonomy.taxonomy = 'category' AND $wpdb->term_taxonomy.term_id IN ( $include_ids )";
+	return $where . " AND $wpdb->posts.ID IN (" .
+		" SELECT tr.object_id FROM $wpdb->term_relationships AS tr" .
+		" INNER JOIN $wpdb->term_taxonomy AS tt ON tr.term_taxonomy_id = tt.term_taxonomy_id" .
+		" WHERE tt.taxonomy = 'category' AND tt.term_id IN ( $include_ids )" .
+		' )';
 }
 
 /**
