@@ -3,7 +3,7 @@
  * Plugin Name:     Category Archives Block
  * Plugin URI:      https://wordpress.org/plugins/category-archives-block/
  * Description:     Displays a monthly or yearly archive of posts for one or more specific categories.
- * Version:         1.0.4
+ * Version:         1.1.0
  * Requires at least: 6.6
  * Requires PHP:    7.0
  * Author:          TipTopPress
@@ -17,7 +17,7 @@
 
 namespace categoryArchivesBlock;
 
-const VERSION        = '1.0.4';
+const VERSION        = '1.1.0';
 
 /**
  * Query arg on the archive links that asks for the month or year as the

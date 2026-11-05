@@ -141,18 +141,6 @@ export default function Edit( { attributes, setAttributes } ) {
 							} )
 						}
 					/>
-					<ToggleControl
-						label={ __(
-							'Adapt Title on Result Page',
-							'category-archives-block'
-						) }
-						checked={ showMonthOrYear }
-						onChange={ () =>
-							setAttributes( {
-								showMonthOrYear: ! showMonthOrYear,
-							} )
-						}
-					/>
 					<SelectControl
 						__next40pxDefaultSize
 						label={ __( 'Order' ) }
@@ -170,6 +158,24 @@ export default function Edit( { attributes, setAttributes } ) {
 						onCategoryChange={ selectCategories }
 						selectedCategories={ categories }
 					/>
+					{ categories?.length > 0 && (
+						<ToggleControl
+							label={ __(
+								'Show date in archive title',
+								'category-archives-block'
+							) }
+							help={ __(
+								'The archive page title shows the date (e.g. "Month: May 2026") instead of the category. Not for weekly archives.',
+								'category-archives-block'
+							) }
+							checked={ showMonthOrYear }
+							onChange={ () =>
+								setAttributes( {
+									showMonthOrYear: ! showMonthOrYear,
+								} )
+							}
+						/>
+					) }
 				</PanelBody>
 			</InspectorControls>
 			<div { ...useBlockProps() }>
