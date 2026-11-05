@@ -129,6 +129,19 @@ describe( 'tokensToCategories', () => {
 		] );
 	} );
 
+	it( 'keeps the name of already selected tokens from FormTokenField', () => {
+		// QueryControls passes selected categories as { id, value }.
+		expect(
+			tokensToCategories(
+				[ { id: 3, value: 'Catégorie 3' }, 'Catégorie 7' ],
+				suggestions
+			)
+		).toEqual( [
+			{ id: 3, name: 'Catégorie 3' },
+			{ id: 7, name: 'Catégorie 7' },
+		] );
+	} );
+
 	it( 'never stores the full REST object of a picked suggestion', () => {
 		const [ category ] = tokensToCategories(
 			[ 'Catégorie 3' ],

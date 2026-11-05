@@ -56,7 +56,8 @@ export function needsNormalization( categories ) {
  * Turns the tokens of the category field into normalized categories.
  *
  * Already selected categories arrive as objects, newly picked ones as their
- * name.
+ * name. QueryControls hands the selected categories to FormTokenField as
+ * { id, value }, so the name of an existing token sits in `value`.
  *
  * @param {Array<Object|string>} tokens      Tokens from the category field.
  * @param {Object}               suggestions Categories keyed by name.
@@ -64,9 +65,15 @@ export function needsNormalization( categories ) {
  *                                                  token is not a known category.
  */
 export function tokensToCategories( tokens, suggestions ) {
-	const categories = tokens.map( ( token ) =>
-		typeof token === 'string' ? ( suggestions[ token ] ?? null ) : token
-	);
+	const categories = tokens.map( ( token ) => {
+		if ( typeof token === 'string' ) {
+			return suggestions[ token ] ?? null;
+		}
+		if ( ! token || typeof token !== 'object' ) {
+			return null;
+		}
+		return { id: token.id, name: token.name ?? token.value };
+	} );
 
 	if ( categories.includes( null ) ) {
 		return null;
