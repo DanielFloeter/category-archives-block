@@ -1,11 +1,9 @@
-
 import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import './style.scss';
 
 import Edit from './edit';
-import save from './save';
 
 import metadata from './../block.json';
 const { name } = metadata;
@@ -49,10 +47,8 @@ registerBlockType( name, {
 
 	example: {
 		attributes: {
-			values:
-				'<ul><a>January 2021</a><a>December 2020</a><a>November 2020</a><a>October 2020</a></ul>',
-			showPostCounts: 
-				true,
+			values: '<ul><a>January 2021</a><a>December 2020</a><a>November 2020</a><a>October 2020</a></ul>',
+			showPostCounts: true,
 		},
 	},
 

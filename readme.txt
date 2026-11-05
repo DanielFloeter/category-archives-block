@@ -3,9 +3,9 @@ Contributors:      kometschuh
 Donate link:       https://wordpress.org/support/plugin/category-archives-block/reviews/
 Tags:              archive, archives, block, category, yearly
 Requires at least: 6.6
-Tested up to:      6.6
+Tested up to:      7.1
 Stable tag:        1.0.4
-Requires PHP:      7.0.0
+Requires PHP:      7.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
