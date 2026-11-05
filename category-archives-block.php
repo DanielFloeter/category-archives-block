@@ -37,6 +37,7 @@ const DATE_TITLE_QUERY_VAR = 'cab_date_title';
 function render_category_archives_block( $attributes ) {
 	$show_post_count = ! empty( $attributes['showPostCounts'] );
 	$is_dropdown     = ! empty( $attributes['displayAsDropdown'] );
+	$type            = get_archive_type( $attributes['groupBy'] ?? '' );
 
 	$filters = array();
 
@@ -61,7 +62,7 @@ function render_category_archives_block( $attributes ) {
 		$dropdown_args = apply_filters(
 			'widget_archives_dropdown_args',
 			array(
-				'type'            => $attributes['groupBy'],
+				'type'            => $type,
 				'format'          => 'option',
 				'show_post_count' => $show_post_count,
 				'order'           => $attributes['order'],
@@ -112,7 +113,7 @@ function render_category_archives_block( $attributes ) {
 	$archives_args = apply_filters(
 		'widget_archives_args',
 		array(
-			'type'            => $attributes['groupBy'],
+			'type'            => $type,
 			'show_post_count' => $show_post_count,
 			'order'           => $attributes['order'],
 		)
@@ -137,6 +138,19 @@ function render_category_archives_block( $attributes ) {
 		$wrapper_attributes,
 		$archives
 	);
+}
+
+/**
+ * Returns a supported archive type, "monthly" for anything else.
+ *
+ * @param string $type The block's "groupBy" attribute.
+ *
+ * @return string One of yearly, monthly, weekly, daily.
+ */
+function get_archive_type( $type ) {
+	$types = array( 'yearly', 'monthly', 'weekly', 'daily' );
+
+	return in_array( $type, $types, true ) ? $type : 'monthly';
 }
 
 /**
@@ -307,27 +321,31 @@ add_filter( 'query_vars', __NAMESPACE__ . '\category_archives_query_vars' );
  * Page Title shows Month or Year on result page
  */
 function category_archives_archive_page_title( $title ) {
-	$prefix = '';
+	if ( ! get_query_var( DATE_TITLE_QUERY_VAR ) || ! is_archive() ) {
+		return $title;
+	}
 
-	if ( get_query_var( DATE_TITLE_QUERY_VAR ) ) {
-		if ( is_archive() ) {
-			if ( is_year() ) {
-				$title  = get_the_date( _x( 'Y', 'yearly archives date format' ) );
-				$prefix = _x( 'Year:', 'date archive title prefix' );
-			} elseif ( is_month() ) {
-				$title  = get_the_date( _x( 'F Y', 'monthly archives date format' ) );
-				$prefix = _x( 'Month:', 'date archive title prefix' );
-			}
-			$prefix = apply_filters( 'get_the_archive_title_prefix', $prefix );
-			if ( $prefix ) {
-				$title = sprintf(
-					/* translators: 1: Title prefix. 2: Title. */
-					_x( '%1$s %2$s', 'archive title' ),
-					$prefix,
-					'<span>' . $title . '</span>'
-				);
-			}
-		}
+	if ( is_year() ) {
+		$title  = get_the_date( _x( 'Y', 'yearly archives date format' ) );
+		$prefix = _x( 'Year:', 'date archive title prefix' );
+	} elseif ( is_month() ) {
+		$title  = get_the_date( _x( 'F Y', 'monthly archives date format' ) );
+		$prefix = _x( 'Month:', 'date archive title prefix' );
+	} elseif ( is_day() ) {
+		$title  = get_the_date( _x( 'F j, Y', 'daily archives date format' ) );
+		$prefix = _x( 'Day:', 'date archive title prefix' );
+	} else {
+		return $title;
+	}
+
+	$prefix = apply_filters( 'get_the_archive_title_prefix', $prefix );
+	if ( $prefix ) {
+		$title = sprintf(
+			/* translators: 1: Title prefix. 2: Title. */
+			_x( '%1$s %2$s', 'archive title' ),
+			$prefix,
+			'<span>' . $title . '</span>'
+		);
 	}
 
 	return $title;

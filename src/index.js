@@ -1,9 +1,10 @@
-import { registerBlockType } from '@wordpress/blocks';
+import { registerBlockType, createBlock } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import './style.scss';
 
 import Edit from './edit';
+import { fromCoreArchives } from './transforms';
 
 import metadata from './../block.json';
 const { name } = metadata;
@@ -63,5 +64,16 @@ registerBlockType( name, {
 	save: () => {
 		const blockProps = useBlockProps.save();
 		return <div { ...blockProps }> Hello in Save.</div>;
+	},
+
+	transforms: {
+		from: [
+			{
+				type: 'block',
+				blocks: [ 'core/archives' ],
+				transform: ( attributes ) =>
+					createBlock( name, fromCoreArchives( attributes ) ),
+			},
+		],
 	},
 } );

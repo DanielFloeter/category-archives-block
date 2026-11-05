@@ -101,8 +101,10 @@ export default function Edit( { attributes, setAttributes } ) {
 						label={ __( 'Group by' ) }
 						selected={ groupBy }
 						options={ [
-							{ label: __( 'Month' ), value: 'monthly' },
 							{ label: __( 'Year' ), value: 'yearly' },
+							{ label: __( 'Month' ), value: 'monthly' },
+							{ label: __( 'Week' ), value: 'weekly' },
+							{ label: __( 'Day' ), value: 'daily' },
 						] }
 						onChange={ ( value ) =>
 							setAttributes( {

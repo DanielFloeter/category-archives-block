@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the features taken over from core/archives (issue #13).
+ * Tests for the features taken over from core/archives (issues #13, #15).
  *
  * @package tiptip
  */
@@ -84,5 +84,39 @@ class Test_Core_Parity extends WP_UnitTestCase {
 		);
 
 		$this->assertStringContainsString( 'class="category-archives-block__label"', $html );
+	}
+
+	/**
+	 * @dataProvider data_group_by
+	 */
+	public function test_group_by( $group_by, $expected_query, $expected_option ) {
+		$this->set_permalink_structure( '' );
+
+		$html = $this->render(
+			array(
+				'groupBy'           => $group_by,
+				'displayAsDropdown' => true,
+				'categories'        => $this->news(),
+			)
+		);
+
+		$this->assertStringContainsString( '>' . $expected_option . '</option>', $html );
+		$this->assertStringContainsString( $expected_query, $html );
+		$this->assertStringContainsString( 'cat=' . self::$news, $html );
+	}
+
+	public function data_group_by() {
+		return array(
+			'daily'   => array( 'daily', '?m=20210115', 'Select Day' ),
+			'weekly'  => array( 'weekly', 'w=', 'Select Week' ),
+			'unknown' => array( 'postbypost', '?m=202101', 'Select Month' ),
+		);
+	}
+
+	public function test_day_title() {
+		$this->go_to( add_query_arg( array( 'm' => '20210115', 'cab_date_title' => 1 ), home_url( '/' ) ) );
+
+		$this->assertTrue( is_day() );
+		$this->assertSame( 'Day: <span>January 15, 2021</span>', get_the_archive_title() );
 	}
 }
