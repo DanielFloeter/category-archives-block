@@ -1,0 +1,11 @@
+<phpunit
+    bootstrap="bootstrap.php"
+    backupGlobals="false"
+    colors="true"
+    >
+    <testsuites>
+        <testsuite name="category-archives-block">
+            <directory prefix="test-" suffix=".php">..</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
