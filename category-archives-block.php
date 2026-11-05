@@ -101,8 +101,8 @@ function render_category_archives_block( $attributes ) {
 	<option value="">' . $label . '</option>' . $archives . '</select>';
 
 		return sprintf(
-			'<div class="%1$s">%2$s</div>',
-			esc_attr( $class ),
+			'<div %1$s>%2$s</div>',
+			get_block_wrapper_attributes( array( 'class' => trim( $class ) ) ),
 			$block_content
 		);
 	}
@@ -123,9 +123,7 @@ function render_category_archives_block( $attributes ) {
 
 	$archives = get_filtered_archives( $archives_args, $filters );
 
-	$classnames = esc_attr( $class );
-
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classnames ) );
+	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => trim( $class ) ) );
 
 	if ( empty( $archives ) ) {
 		return sprintf(

@@ -100,8 +100,8 @@ export default function Edit( { attributes, setAttributes } ) {
 						label={ __( 'Group by' ) }
 						selected={ groupBy }
 						options={ [
-							{ label: 'Month', value: 'monthly' },
-							{ label: 'Year', value: 'yearly' },
+							{ label: __( 'Month' ), value: 'monthly' },
+							{ label: __( 'Year' ), value: 'yearly' },
 						] }
 						onChange={ ( value ) =>
 							setAttributes( {
@@ -128,7 +128,10 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<ToggleControl
-						label={ __( 'Adapt Title on Result Page' ) }
+						label={ __(
+							'Adapt Title on Result Page',
+							'category-archives-block'
+						) }
 						checked={ showMonthOrYear }
 						onChange={ () =>
 							setAttributes( {
