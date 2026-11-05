@@ -49,16 +49,33 @@
 		}
 	},
 	"supports": {
+		"anchor": true,
 		"align": true,
 		"html": false,
+		"__experimentalBorder": {
+			"radius": true,
+			"color": true,
+			"width": true,
+			"style": true
+		},
 		"spacing": {
 			"margin": true,
-			"padding": true
+			"padding": true,
+			"__experimentalDefaultControls": {
+				"margin": false,
+				"padding": false
+			}
 		},
 		"color": {
 			"background": true,
+			"text": true,
 			"link": true,
-			"text": true
+			"gradients": true,
+			"__experimentalDefaultControls": {
+				"background": true,
+				"text": true,
+				"link": true
+			}
 		},
 		"typography": {
 			"fontSize": true,
@@ -72,6 +89,9 @@
 			"__experimentalDefaultControls": {
 				"fontSize": true
 			}
+		},
+		"interactivity": {
+			"clientNavigation": true
 		}
 	},
 	"editorScript": "file:./build/index.js",
