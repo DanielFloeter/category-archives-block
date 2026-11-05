@@ -38,6 +38,7 @@ function render_category_archives_block( $attributes ) {
 	$show_post_count = ! empty( $attributes['showPostCounts'] );
 	$is_dropdown     = ! empty( $attributes['displayAsDropdown'] );
 	$type            = get_archive_type( $attributes['groupBy'] ?? '' );
+	$order           = 'asc' === strtolower( $attributes['order'] ?? '' ) ? 'ASC' : 'DESC';
 
 	$filters = array();
 
@@ -65,7 +66,7 @@ function render_category_archives_block( $attributes ) {
 				'type'            => $type,
 				'format'          => 'option',
 				'show_post_count' => $show_post_count,
-				'order'           => $attributes['order'],
+				'order'           => $order,
 			)
 		);
 
@@ -115,7 +116,7 @@ function render_category_archives_block( $attributes ) {
 		array(
 			'type'            => $type,
 			'show_post_count' => $show_post_count,
-			'order'           => $attributes['order'],
+			'order'           => $order,
 		)
 	);
 

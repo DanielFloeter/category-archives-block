@@ -13,6 +13,7 @@
 /src
 package.json
 package-lock.json
+vitest.config.mjs
 
 # Tests
 /tests

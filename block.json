@@ -31,18 +31,6 @@
 			"type": "string",
 			"default": "desc"
 		},
-		"orderBy": {
-			"type": "string",
-			"default": "date"
-		},
-		"categorySuggestions": {
-			"type": "array",
-			"default": []
-		},
-		"selectCategories": {
-			"type": "array",
-			"default": ""
-		},
 		"categories": {
 			"type": "array",
 			"default": []
@@ -96,5 +84,6 @@
 	},
 	"editorScript": "file:./build/index.js",
 	"editorStyle": "file:./build/style-index.css",
-	"style": "file:./build/style-index.css"
+	"style": "file:./build/style-index.css",
+	"example": {}
 }

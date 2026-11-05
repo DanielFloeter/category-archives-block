@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the features taken over from core/archives (issues #13, #15).
+ * Tests for the features taken over from core/archives (issues #13, #15, #16).
  *
  * @package tiptip
  */
@@ -111,6 +111,22 @@ class Test_Core_Parity extends WP_UnitTestCase {
 			'weekly'  => array( 'weekly', 'w=', 'Select Week' ),
 			'unknown' => array( 'postbypost', '?m=202101', 'Select Month' ),
 		);
+	}
+
+	public function test_missing_attributes_fall_back_to_monthly_desc() {
+		$this->set_permalink_structure( '' );
+
+		$html = $this->render( array() );
+
+		$this->assertMatchesRegularExpression( '/m=202101.*m=202012/s', $html );
+	}
+
+	public function test_order_asc() {
+		$this->set_permalink_structure( '' );
+
+		$html = $this->render( array( 'order' => 'asc' ) );
+
+		$this->assertMatchesRegularExpression( '/m=202012.*m=202101/s', $html );
 	}
 
 	public function test_day_title() {

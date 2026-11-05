@@ -1,9 +1,9 @@
 import { registerBlockType, createBlock } from '@wordpress/blocks';
-import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import './style.scss';
 
 import Edit from './edit';
+import deprecated from './deprecated';
 import { fromCoreArchives } from './transforms';
 
 import metadata from './../block.json';
@@ -46,25 +46,15 @@ registerBlockType( name, {
 		__( 'widget', 'category-archives-block' ),
 	],
 
-	example: {
-		attributes: {
-			values: '<ul><a>January 2021</a><a>December 2020</a><a>November 2020</a><a>October 2020</a></ul>',
-			showPostCounts: true,
-		},
-	},
-
 	/**
 	 * @see ./edit.js
 	 */
 	edit: Edit,
 
-	/**
-	 * @see ./save.js
-	 */
-	save: () => {
-		const blockProps = useBlockProps.save();
-		return <div { ...blockProps }> Hello in Save.</div>;
-	},
+	// Rendered on the server, see render_category_archives_block().
+	save: () => null,
+
+	deprecated,
 
 	transforms: {
 		from: [

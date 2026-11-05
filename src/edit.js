@@ -6,6 +6,7 @@ import {
 	PanelBody,
 	ToggleControl,
 	RadioControl,
+	SelectControl,
 	QueryControls,
 	Disabled,
 } from '@wordpress/components';
@@ -41,7 +42,6 @@ export default function Edit( { attributes, setAttributes } ) {
 		showLabel,
 		groupBy,
 		order,
-		orderBy,
 		categories,
 	} = attributes;
 	const [ categoriesList, setCategoriesList ] = useState( [] );
@@ -153,14 +153,19 @@ export default function Edit( { attributes, setAttributes } ) {
 							} )
 						}
 					/>
-					<QueryControls
-						{ ...{ order, orderBy } }
-						onOrderChange={ ( value ) =>
+					<SelectControl
+						__next40pxDefaultSize
+						label={ __( 'Order' ) }
+						value={ order }
+						options={ [
+							{ label: __( 'Newest to oldest' ), value: 'desc' },
+							{ label: __( 'Oldest to newest' ), value: 'asc' },
+						] }
+						onChange={ ( value ) =>
 							setAttributes( { order: value } )
 						}
-						onOrderByChange={ ( value ) =>
-							setAttributes( { orderBy: value } )
-						}
+					/>
+					<QueryControls
 						categorySuggestions={ categorySuggestions }
 						onCategoryChange={ selectCategories }
 						selectedCategories={ categories }
