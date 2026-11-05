@@ -4,7 +4,7 @@
 	"title": "Category Archives",
 	"category": "widgets",
 	"icon": "archive",
-	"description": "Displays a monthly or yearly archive of posts for one or more specific categories.",
+	"description": "Displays a yearly, monthly, weekly or daily archive of posts for one or more specific categories.",
 	"textdomain": "category-archives-block",
 	"attributes": {
 		"showMonthOrYear": {

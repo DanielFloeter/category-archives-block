@@ -22,13 +22,15 @@ registerBlockType( name, {
 	 * It will be shown in the Block Tab in the Settings Sidebar.
 	 */
 	description: __(
-		'Displays a monthly or yearly archive of posts for one or more specific categories.',
+		'Displays a yearly, monthly, weekly or daily archive of posts for one or more specific categories.',
 		'category-archives-block'
 	),
 
 	keywords: [
 		__( 'monthly', 'category-archives-block' ),
 		__( 'yearly', 'category-archives-block' ),
+		__( 'weekly', 'category-archives-block' ),
+		__( 'daily', 'category-archives-block' ),
 		__( 'category', 'category-archives-block' ),
 		__( 'archive', 'category-archives-block' ),
 		__( 'archives', 'category-archives-block' ),
@@ -37,6 +39,8 @@ registerBlockType( name, {
 		__( 'post count', 'category-archives-block' ),
 		__( 'month', 'category-archives-block' ),
 		__( 'year', 'category-archives-block' ),
+		__( 'week', 'category-archives-block' ),
+		__( 'day', 'category-archives-block' ),
 		__( 'date', 'category-archives-block' ),
 		__( 'posts', 'category-archives-block' ),
 		__( 'blog', 'category-archives-block' ),
