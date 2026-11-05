@@ -10,10 +10,21 @@ import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import ServerSideRender from '@wordpress/server-side-render';
 
 /**
+ * Internal dependencies
+ */
+import {
+	getRendererProps,
+	needsNormalization,
+	normalizeCategories,
+	tokensToCategories,
+} from './categories';
+
+/**
  * Module Constants
  */
 const CATEGORIES_LIST_QUERY = {
 	per_page: -1,
+	_fields: 'id,name',
 };
 
 export default function Edit( { attributes, setAttributes } ) {
@@ -27,27 +38,21 @@ export default function Edit( { attributes, setAttributes } ) {
 		{}
 	);
 	const selectCategories = ( tokens ) => {
-		const hasNoSuggestion = tokens.some(
-			( token ) =>
-				typeof token === 'string' && ! categorySuggestions[ token ]
-		);
-		if ( hasNoSuggestion ) {
+		const selected = tokensToCategories( tokens, categorySuggestions );
+		// Ignore tokens that were typed but not picked from the suggestions.
+		if ( selected === null ) {
 			return;
 		}
-		// Categories that are already will be objects, while new additions will be strings (the name).
-		// allCategories nomalizes the array so that they are all objects.
-		const allCategories = tokens.map( ( token ) => {
-			return typeof token === 'string'
-				? categorySuggestions[ token ]
-				: token;
-		} );
-		// We do nothing if the category is not selected
-		// from suggestions.
-		if ( allCategories.includes( null ) ) {
-			return false;
-		}
-		setAttributes( { categories: allCategories } );
+		setAttributes( { categories: selected } );
 	};
+
+	// Blocks saved by older versions store the full REST category objects; trim
+	// them to { id, name } so the saved post content shrinks as well.
+	useEffect( () => {
+		if ( needsNormalization( categories ) ) {
+			setAttributes( { categories: normalizeCategories( categories ) } );
+		}
+	}, [ categories ] );
 
 	const isStillMounted = useRef();
 
@@ -133,10 +138,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 			<div { ...useBlockProps() }>
 				<Disabled>
-					<ServerSideRender
-						block="tiptip/category-archives-block"
-						attributes={ attributes }
-					/>
+					<ServerSideRender { ...getRendererProps( attributes ) } />
 				</Disabled>
 			</div>
 		</>
