@@ -65,7 +65,7 @@ export function needsNormalization( categories ) {
  */
 export function tokensToCategories( tokens, suggestions ) {
 	const categories = tokens.map( ( token ) =>
-		typeof token === 'string' ? suggestions[ token ] ?? null : token
+		typeof token === 'string' ? ( suggestions[ token ] ?? null ) : token
 	);
 
 	if ( categories.includes( null ) ) {

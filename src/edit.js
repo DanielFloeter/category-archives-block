@@ -2,7 +2,13 @@
  * WordPress dependencies
  */
 import { useState, useEffect, useRef } from '@wordpress/element';
-import { PanelBody, ToggleControl, RadioControl, QueryControls, Disabled } from '@wordpress/components';
+import {
+	PanelBody,
+	ToggleControl,
+	RadioControl,
+	QueryControls,
+	Disabled,
+} from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __ } from '@wordpress/i18n';
@@ -28,7 +34,15 @@ const CATEGORIES_LIST_QUERY = {
 };
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { showMonthOrYear, showPostCounts, displayAsDropdown, groupBy, order, orderBy, categories } = attributes;
+	const {
+		showMonthOrYear,
+		showPostCounts,
+		displayAsDropdown,
+		groupBy,
+		order,
+		orderBy,
+		categories,
+	} = attributes;
 	const [ categoriesList, setCategoriesList ] = useState( [] );
 	const categorySuggestions = categoriesList.reduce(
 		( accumulator, category ) => ( {
@@ -52,7 +66,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		if ( needsNormalization( categories ) ) {
 			setAttributes( { categories: normalizeCategories( categories ) } );
 		}
-	}, [ categories ] );
+	}, [ categories, setAttributes ] );
 
 	const isStillMounted = useRef();
 
@@ -89,9 +103,9 @@ export default function Edit( { attributes, setAttributes } ) {
 							{ label: 'Month', value: 'monthly' },
 							{ label: 'Year', value: 'yearly' },
 						] }
-						onChange={ ( groupBy ) =>
+						onChange={ ( value ) =>
 							setAttributes( {
-								groupBy,
+								groupBy: value,
 							} )
 						}
 					/>

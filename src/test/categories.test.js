@@ -130,7 +130,10 @@ describe( 'tokensToCategories', () => {
 	} );
 
 	it( 'never stores the full REST object of a picked suggestion', () => {
-		const [ category ] = tokensToCategories( [ 'Catégorie 3' ], suggestions );
+		const [ category ] = tokensToCategories(
+			[ 'Catégorie 3' ],
+			suggestions
+		);
 		expect( Object.keys( category ).sort() ).toEqual( [ 'id', 'name' ] );
 	} );
 
