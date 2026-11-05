@@ -52,13 +52,9 @@ function render_category_archives_block( $attributes ) {
 		};
 	}
 
-	$class = '';
-
 	if ( $is_dropdown ) {
 
-		$class .= ' category-archives-block-dropdown';
-
-		$dropdown_id = esc_attr( uniqid( 'category-archives-block-' ) );
+		$dropdown_id = wp_unique_id( 'category-archives-block-' );
 		$title       = __( 'Archives' );
 
 		/** This filter is documented in wp-includes/widgets/class-wp-widget-archives.php */
@@ -94,20 +90,23 @@ function render_category_archives_block( $attributes ) {
 				break;
 		}
 
-		$label = esc_html( $label );
+		$label_class = 'category-archives-block__label';
+		if ( empty( $attributes['showLabel'] ) ) {
+			$label_class .= ' screen-reader-text';
+		}
 
-		$block_content = '<label class="screen-reader-text" for="' . $dropdown_id . '">' . $title . '</label>
-	<select id="' . $dropdown_id . '" name="archive-dropdown" onchange="document.location.href=this.options[this.selectedIndex].value;">
-	<option value="">' . $label . '</option>' . $archives . '</select>';
+		$block_content = '<label for="' . esc_attr( $dropdown_id ) . '" class="' . esc_attr( $label_class ) . '">' . esc_html( $title ) . '</label>
+	<select id="' . esc_attr( $dropdown_id ) . '" name="archive-dropdown">
+	<option value="">' . esc_html( $label ) . '</option>' . $archives . '</select>';
+
+		$block_content .= build_dropdown_script( $dropdown_id );
 
 		return sprintf(
 			'<div %1$s>%2$s</div>',
-			get_block_wrapper_attributes( array( 'class' => trim( $class ) ) ),
+			get_block_wrapper_attributes( array( 'class' => 'category-archives-block-dropdown' ) ),
 			$block_content
 		);
 	}
-
-	$class .= ' category-archives-block-list';
 
 	/** This filter is documented in wp-includes/widgets/class-wp-widget-archives.php */
 	$archives_args = apply_filters(
@@ -123,13 +122,13 @@ function render_category_archives_block( $attributes ) {
 
 	$archives = get_filtered_archives( $archives_args, $filters );
 
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => trim( $class ) ) );
+	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => 'category-archives-block-list' ) );
 
 	if ( empty( $archives ) ) {
 		return sprintf(
 			'<div %1$s>%2$s</div>',
 			$wrapper_attributes,
-			__( 'No archives to show.' )
+			esc_html__( 'No archives to show.' )
 		);
 	}
 
@@ -137,6 +136,53 @@ function render_category_archives_block( $attributes ) {
 		'<ul %1$s>%2$s</ul>',
 		$wrapper_attributes,
 		$archives
+	);
+}
+
+/**
+ * Builds the script that opens the archive picked in the dropdown.
+ *
+ * Like core/archives: navigation waits briefly and skips Escape, so keyboard
+ * users can move through the options without leaving the page, and the empty
+ * placeholder option does nothing.
+ *
+ * @param string $dropdown_id ID of the select element.
+ *
+ * @return string The inline script tag.
+ */
+function build_dropdown_script( $dropdown_id ) {
+	$script = <<<'JS'
+( ( dropdownId ) => {
+	const dropdown = document.getElementById( dropdownId );
+	if ( ! dropdown ) {
+		return;
+	}
+	dropdown.addEventListener( 'keyup', ( event ) => {
+		if ( 'Escape' === event.key ) {
+			dropdown.dataset.lastkey = 'escape';
+		} else {
+			delete dropdown.dataset.lastkey;
+		}
+	} );
+	dropdown.addEventListener( 'click', () => {
+		delete dropdown.dataset.lastkey;
+	} );
+	dropdown.addEventListener( 'change', () => {
+		setTimeout( () => {
+			if ( 'escape' === dropdown.dataset.lastkey ) {
+				return;
+			}
+			if ( dropdown.value ) {
+				location.href = dropdown.value;
+			}
+		}, 250 );
+	} );
+} )
+JS;
+
+	return wp_get_inline_script_tag(
+		$script . '( ' . wp_json_encode( $dropdown_id, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ) . ' );' .
+		"\n//# sourceURL=" . rawurlencode( __FUNCTION__ )
 	);
 }
 

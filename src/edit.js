@@ -38,6 +38,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		showMonthOrYear,
 		showPostCounts,
 		displayAsDropdown,
+		showLabel,
 		groupBy,
 		order,
 		orderBy,
@@ -118,6 +119,17 @@ export default function Edit( { attributes, setAttributes } ) {
 							} )
 						}
 					/>
+					{ displayAsDropdown && (
+						<ToggleControl
+							label={ __( 'Show label' ) }
+							checked={ showLabel }
+							onChange={ () =>
+								setAttributes( {
+									showLabel: ! showLabel,
+								} )
+							}
+						/>
+					) }
 					<ToggleControl
 						label={ __( 'Show post counts' ) }
 						checked={ showPostCounts }

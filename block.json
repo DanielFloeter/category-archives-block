@@ -19,6 +19,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"showLabel": {
+			"type": "boolean",
+			"default": false
+		},
 		"groupBy": {
 			"type": "string",
 			"default": "monthly"
