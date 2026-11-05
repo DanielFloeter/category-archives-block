@@ -165,7 +165,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								'category-archives-block'
 							) }
 							help={ __(
-								'The archive page title shows the date (e.g. "Month: May 2026") instead of the category. Not for weekly archives.',
+								'The archive page title shows the date (e.g. "Month: May 2026") instead of the category.',
 								'category-archives-block'
 							) }
 							checked={ showMonthOrYear }

@@ -55,7 +55,7 @@ Select the Archives block, click the block icon in the toolbar and transform it 
 
 The date archive of your theme, filtered to the selected categories (e.g. /2026/05/?cat=3,7). You can change its layout in the Site Editor with the "Date Archives" or "All Archives" template.
 
-= Can the result page show which year, month or day is displayed? =
+= Can the result page show which year, month, week or day is displayed? =
 
 Yes. Select at least one category, then enable "Show date in archive title" in the block settings. The archive page title shows the date (e.g. "Month: May 2026") instead of the category.
 

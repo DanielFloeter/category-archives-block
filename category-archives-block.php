@@ -319,14 +319,26 @@ function category_archives_query_vars( $vars ) {
 add_filter( 'query_vars', __NAMESPACE__ . '\category_archives_query_vars' );
 
 /**
- * Page Title shows Month or Year on result page
+ * Page Title shows the year, month, week or day on the result page
  */
 function category_archives_archive_page_title( $title ) {
 	if ( ! get_query_var( DATE_TITLE_QUERY_VAR ) || ! is_archive() ) {
 		return $title;
 	}
 
-	if ( is_year() ) {
+	// Weekly links carry the year as well (?m=2025&w=39), so is_year() is
+	// also true for them: check the week first (issue #18).
+	if ( is_date() && get_query_var( 'w' ) ) {
+		$post_date = get_the_date( 'Y-m-d' );
+		if ( ! $post_date ) {
+			return $title;
+		}
+
+		$week        = get_weekstartend( $post_date, (int) get_option( 'start_of_week' ) );
+		$date_format = get_option( 'date_format' );
+		$title       = date_i18n( $date_format, $week['start'] ) . ' &#8211; ' . date_i18n( $date_format, $week['end'] );
+		$prefix      = _x( 'Week:', 'date archive title prefix', 'category-archives-block' );
+	} elseif ( is_year() ) {
 		$title  = get_the_date( _x( 'Y', 'yearly archives date format' ) );
 		$prefix = _x( 'Year:', 'date archive title prefix' );
 	} elseif ( is_month() ) {
